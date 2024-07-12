@@ -1,0 +1,16 @@
+{
+  "config": {
+    "classmap-authoritative": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Combodo\\iTop\\MFATotp\\": "src"
+    }
+  },
+  "name": "combodo/combodo-mfa-totp",
+  "type": "itop-extension",
+  "description": "MFA TOTP mode",
+  "require": {
+    "composer-runtime-api": "^2.0"
+  }
+}
