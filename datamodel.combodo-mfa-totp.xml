@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2">
-  <constants>
-  </constants>
   <classes>
     <class id="MFAUserSettingsTotpApp" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
