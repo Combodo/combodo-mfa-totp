@@ -3,9 +3,9 @@
   <constants>
   </constants>
   <classes>
-    <class id="UserMFATotpApp" _created_in="combodo-mfa-totp" _delta="define">
+    <class id="MFAUserSettingsTotpApp" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>bizmodel,searchable,UserMFA</category>
+        <category>bizmodel,searchable,MFAUserSettings</category>
         <abstract>false</abstract>
         <db_table>mfa_user_totp_app</db_table>
         <style>
@@ -78,11 +78,11 @@
           </items>
         </details>
       </presentation>
-      <parent>UserMFA</parent>
+      <parent>MFAUserSettings</parent>
     </class>
-    <class id="UserMFATotpPMail" _created_in="combodo-mfa-totp" _delta="define">
+    <class id="MFAUserSettingsTotpPMail" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>bizmodel,searchable,UserMFA</category>
+        <category>bizmodel,searchable,MFAUserSettings</category>
         <abstract>false</abstract>
         <db_table>mfa_user_totp_mail</db_table>
         <style>
@@ -152,7 +152,7 @@
           </items>
         </details>
       </presentation>
-      <parent>UserMFA</parent>
+      <parent>MFAUserSettings</parent>
     </class>
   </classes>
   <files>
