@@ -78,7 +78,7 @@
       </presentation>
       <parent>MFAUserSettings</parent>
     </class>
-    <class id="MFAUserSettingsTotpPMail" _created_in="combodo-mfa-totp" _delta="define">
+    <class id="MFAUserSettingsTotpMail" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
         <category>bizmodel,searchable,MFAMode</category>
         <abstract>false</abstract>
