@@ -3,7 +3,7 @@
   <classes>
     <class id="MFAUserSettingsTotpApp" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>bizmodel,searchable,MFAUserSettings</category>
+        <category>bizmodel,searchable,MFAMode</category>
         <abstract>false</abstract>
         <db_table>mfa_user_totp_app</db_table>
         <style>
@@ -80,7 +80,7 @@
     </class>
     <class id="MFAUserSettingsTotpPMail" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>bizmodel,searchable,MFAUserSettings</category>
+        <category>bizmodel,searchable,MFAMode</category>
         <abstract>false</abstract>
         <db_table>mfa_user_totp_mail</db_table>
         <style>
