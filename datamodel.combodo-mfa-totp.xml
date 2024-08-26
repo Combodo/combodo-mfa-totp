@@ -47,7 +47,52 @@
           <tracking_level>all</tracking_level>
         </field>
       </fields>
-      <methods/>
+      <methods>
+         <method id="GetTwigContextForConfiguration">
+          <comment>/**
+            *
+            * @return LoginTwigContext
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function GetTwigContextForConfiguration(): LoginTwigContext
+          {
+            return new LoginContext();
+          }]]></code>
+        </method>
+
+         <method id="GetTwigContextForLoginValidation">
+          <comment>/**
+            *
+            * @return LoginTwigContext
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function GetTwigContextForLoginValidation(): LoginTwigContext
+          {
+            return new LoginContext();
+          }]]></code>
+        </method>
+
+         <method id="GetTwigContextForModeSwitch">
+          <comment>/**
+	          * Provide Display information for link to configure MFA in another mode than currently displayed or default one
+            * @return LoginTwigContext
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function GetTwigContextForModeSwitch(): LoginTwigContext
+          {
+            return new LoginContext();
+          }]]></code>
+        </method>
+      </methods>
       <presentation>
         <list>
           <items>
@@ -124,7 +169,52 @@
           <tracking_level>all</tracking_level>
         </field>
       </fields>
-      <methods/>
+      <methods>
+         <method id="GetTwigContextForConfiguration">
+          <comment>/**
+            *
+            * @return LoginTwigContext
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function GetTwigContextForConfiguration(): LoginTwigContext
+          {
+            return new LoginContext();
+          }]]></code>
+        </method>
+
+         <method id="GetTwigContextForLoginValidation">
+          <comment>/**
+            *
+            * @return LoginTwigContext
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function GetTwigContextForLoginValidation(): LoginTwigContext
+          {
+            return new LoginContext();
+          }]]></code>
+        </method>
+
+         <method id="GetTwigContextForModeSwitch">
+          <comment>/**
+	          * Provide Display information for link to configure MFA in another mode than currently displayed or default one
+            * @return LoginTwigContext
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function GetTwigContextForModeSwitch(): LoginTwigContext
+          {
+            return new LoginContext();
+          }]]></code>
+        </method>
+      </methods>
       <presentation>
         <list>
           <items>
