@@ -92,6 +92,36 @@
             return new LoginContext();
           }]]></code>
         </method>
+
+        <method id="HasToDisplayValidation">
+          <comment>/**
+            * Indicates if the validation screen has to be displayed or not
+            * @return bool
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function HasToDisplayValidation(): bool
+          {
+            return true;
+          }]]></code>
+        </method>
+
+        <method id="ValidateLogin">
+          <comment>/**
+            * Indicates if the validation code given by the user is valid or not
+            * @return bool
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function ValidateLogin(): bool
+          {
+            return true;
+          }]]></code>
+        </method>
       </methods>
       <presentation>
         <list>
@@ -212,6 +242,36 @@
           <code><![CDATA[	public function GetTwigContextForModeSwitch(): LoginTwigContext
           {
             return new LoginContext();
+          }]]></code>
+        </method>
+
+        <method id="HasToDisplayValidation">
+          <comment>/**
+            * Indicates if the validation screen has to be displayed or not
+            * @return bool
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function HasToDisplayValidation(): bool
+          {
+            return true;
+          }]]></code>
+        </method>
+
+        <method id="ValidateLogin">
+          <comment>/**
+            * Indicates if the validation code given by the user is valid or not
+            * @return bool
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>Custom</type>
+          <code><![CDATA[	public function ValidateLogin(): bool
+          {
+            return true;
           }]]></code>
         </method>
       </methods>
