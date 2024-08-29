@@ -29,7 +29,7 @@ class MFATOTPHelper
 
 	public static function GetSCSSFile()
 	{
-		return 'env-'.utils::GetCurrentEnvironment().'/'.self::MODULE_NAME.'/assets/css/MFATOTP.scss';
+		return 'env-'.utils::GetCurrentEnvironment().'/'.self::MODULE_NAME.'/assets/css/MFATOTP.css';
 	}
 
 }

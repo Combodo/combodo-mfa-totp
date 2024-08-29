@@ -12,6 +12,7 @@ use MetaModel;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
+use UserRights;
 use utils;
 
 class MFATOTPService
@@ -33,7 +34,7 @@ class MFATOTPService
 
 	public function GetTwigContextForConfiguration(MFAUserSettings $oMFAUserSettings): LoginTwigContext
 	{
-		$sUserId = \UserRights::GetUserId();
+		$sUserId = UserRights::GetUserId();
 		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
 		$oMFAUserSettings = MetaModel::NewObject(MFAUserSettingsTOTPApp::class, ['user_id' => $sUserId]);
 		$oTOTPService = new OTPService($oMFAUserSettings);
@@ -70,16 +71,33 @@ class MFATOTPService
 		$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPAppValidate.ready.js.twig', $aData));
 
 		return $oLoginContext;
-	}
 
+	}
 	public function HasToDisplayValidation(MFAUserSettingsTOTP $oMFAUserSettings): bool
 	{
+		if ($oMFAUserSettings instanceof MFAUserSettingsTOTPApp) {
+			$sCode = utils::ReadPostedParam('totp_app_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+			return ($sCode === false);
+		}
 		return true;
 	}
 
 	public function ValidateLogin(MFAUserSettingsTOTP $oMFAUserSettings): bool
 	{
-		return true;
+		$sCode = utils::ReadPostedParam('totp_app_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+		if ($sCode === false) {
+			UserRights::Logoff();
+			return false;
+		}
+		$oTOTPService = new OTPService($oMFAUserSettings);
+		$sRealCode = $oTOTPService->GetCode();
+
+		if ($sRealCode === $sCode) {
+			return true;
+		}
+
+		UserRights::Logoff();
+		return false;
 	}
 
 	public function GetConfigurationURLForMyAccountRedirection(MFAUserSettingsTOTP $oMFAUserSettings): string

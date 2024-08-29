@@ -3,9 +3,12 @@
 
 
 <form id="login-form" method="post">
-	<div>
-		<input type="text" id="totp_app_code" name="totp_app_code" value="" size="6"
-		       class="ibo-input ibo-input ibo-block ibo-2fa--code-input" oninput="CheckLoginCode();"
-		       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:EnterCode'|dict_s }}">
+	<div id="login-input">
+		<div>
+			<label for="totp_app_code">{{ 'MFATOTP:App:UI:EnterCode'|dict_s }}</label>
+			<input type="text" id="totp_app_code" name="totp_app_code" value="" size="6"
+			       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
+			       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:Code'|dict_s }}">
+		</div>
 	</div>
 </form>
