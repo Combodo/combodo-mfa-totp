@@ -6,6 +6,11 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Combodo\\iTop\\MFATotp\\Controller\\MFATOTPMyAccountController' => $baseDir . '/src/Controller/MFATOTPMyAccountController.php',
+    'Combodo\\iTop\\MFATotp\\Helper\\MFATOTPHelper' => $baseDir . '/src/Helper/MFATOTPHelper.php',
+    'Combodo\\iTop\\MFATotp\\QRCode\\QRCode' => $baseDir . '/src/QRCode/QRCode.php',
+    'Combodo\\iTop\\MFATotp\\Service\\MFATOTPService' => $baseDir . '/src/Service/MFATOTPService.php',
+    'Combodo\\iTop\\MFATotp\\Service\\OTPService' => $baseDir . '/src/Service/OTPService.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'OTPHP\\Factory' => $vendorDir . '/spomky-labs/otphp/src/Factory.php',
     'OTPHP\\FactoryInterface' => $vendorDir . '/spomky-labs/otphp/src/FactoryInterface.php',

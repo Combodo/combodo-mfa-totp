@@ -46,6 +46,11 @@ class ComposerStaticInit090791b9d4e4bb914e67e4939a7273ec
     );
 
     public static $classMap = array (
+        'Combodo\\iTop\\MFATotp\\Controller\\MFATOTPMyAccountController' => __DIR__ . '/../..' . '/src/Controller/MFATOTPMyAccountController.php',
+        'Combodo\\iTop\\MFATotp\\Helper\\MFATOTPHelper' => __DIR__ . '/../..' . '/src/Helper/MFATOTPHelper.php',
+        'Combodo\\iTop\\MFATotp\\QRCode\\QRCode' => __DIR__ . '/../..' . '/src/QRCode/QRCode.php',
+        'Combodo\\iTop\\MFATotp\\Service\\MFATOTPService' => __DIR__ . '/../..' . '/src/Service/MFATOTPService.php',
+        'Combodo\\iTop\\MFATotp\\Service\\OTPService' => __DIR__ . '/../..' . '/src/Service/OTPService.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'OTPHP\\Factory' => __DIR__ . '/..' . '/spomky-labs/otphp/src/Factory.php',
         'OTPHP\\FactoryInterface' => __DIR__ . '/..' . '/spomky-labs/otphp/src/FactoryInterface.php',

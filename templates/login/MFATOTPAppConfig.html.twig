@@ -1,0 +1,20 @@
+{# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
+{# @license     http://opensource.org/licenses/AGPL-3.0 #}
+
+
+<div>{{ sQRCodeSVG|raw }}</div>
+<div class="ibo-2fa-login-text">
+	<p>{{ 'MFATOTP:App:UI:Secret'|dict_s }} {{ sSecret }}</p>
+	<p>{{ 'MFATOTP:App:UI:Issuer'|dict_s }} {{ sIssuer }}</p>
+	<p>{{ 'MFATOTP:App:UI:Label'|dict_s }} {{ sLabel }}</p>
+	<p>&nbsp;</p>
+	<p>{{ 'MFATOTP:App:UI:CodeValidationTitle'|dict_format(sIssuer, sLabel)|raw }}</p>
+</div>
+<form id="login-form" method="post">
+	<div>
+		<input type="text" id="2fa_code" name="2fa_code" value="" size="6"
+		       class="ibo-input ibo-input ibo-block ibo-2fa--code-input" oninput="CheckLoginCode();"
+		       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:EnterCode'|dict_s }}">
+	</div>
+</form>
+
