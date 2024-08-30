@@ -16,8 +16,8 @@
         </naming>
         <reconciliation>
           <attributes>
-            <attribute id="secret"/>
             <attribute id="user_id"/>
+            <attribute id="finalclass"/>
           </attributes>
         </reconciliation>
         <uniqueness_rules/>
@@ -183,8 +183,8 @@
         </naming>
         <reconciliation>
           <attributes>
-            <attribute id="secret"/>
             <attribute id="user_id"/>
+            <attribute id="finalclass"/>
           </attributes>
         </reconciliation>
         <uniqueness_rules>
@@ -250,8 +250,8 @@
         </naming>
         <reconciliation>
           <attributes>
-            <attribute id="secret"/>
             <attribute id="user_id"/>
+            <attribute id="finalclass"/>
           </attributes>
         </reconciliation>
         <uniqueness_rules>
