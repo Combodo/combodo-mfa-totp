@@ -8,6 +8,7 @@ namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use LoginTwigContext;
+use LoginWebPage;
 use MetaModel;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
@@ -56,7 +57,6 @@ class MFATOTPService
 
 	public function GetTwigContextForLoginValidation(MFAUserSettings $oMFAUserSettings): LoginTwigContext
 	{
-
 		$oLoginContext =  new LoginTwigContext();
 		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
 		$oTOTPService = new OTPService($oMFAUserSettings);
@@ -84,25 +84,50 @@ class MFATOTPService
 
 	public function ValidateLogin(MFAUserSettingsTOTP $oMFAUserSettings): bool
 	{
-		$sCode = utils::ReadPostedParam('totp_app_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
-		if ($sCode === false) {
-			UserRights::Logoff();
-			return false;
+		$sRet = $this->ValidateCode($oMFAUserSettings);
+		switch ($sRet) {
+			case self::NO_CODE:
+			case self::WRONG_CODE:
+				LoginWebPage::ResetSession();
+				return false;
+
+			default:
+				return true;
 		}
+	}
+
+	public const NO_CODE = 'no_code';
+	public const WRONG_CODE = 'wrong_code';
+	public const CODE_OK = 'code_ok';
+
+	public function ValidateCode(MFAUserSettingsTOTP $oMFAUserSettings): string
+	{
+		$sCode = utils::ReadPostedParam('totp_app_code', 0, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+		if ($sCode === 0) {
+			return self::NO_CODE;
+		}
+
+		if ($sCode === false) {
+			return self::WRONG_CODE;
+		}
+
 		$oTOTPService = new OTPService($oMFAUserSettings);
 		$sRealCode = $oTOTPService->GetCode();
 
 		if ($sRealCode === $sCode) {
-			return true;
+			return self::CODE_OK;
 		}
 
-		UserRights::Logoff();
-		return false;
+		return self::WRONG_CODE;
 	}
 
 	public function GetConfigurationURLForMyAccountRedirection(MFAUserSettingsTOTP $oMFAUserSettings): string
 	{
-		return utils::GetAbsoluteUrlModulePage(MFATOTPHelper::MODULE_NAME, 'index.php', ['operation' => 'MFATOTPAppConfig']);
+		if ($oMFAUserSettings instanceof MFAUserSettingsTOTPApp) {
+			return utils::GetAbsoluteUrlModulePage(MFATOTPHelper::MODULE_NAME, 'index.php', ['operation' => 'MFATOTPAppConfig']);
+		}
+
+		return utils::GetAbsoluteUrlModulePage(MFATOTPHelper::MODULE_NAME, 'index.php', ['operation' => 'MFATOTPMailConfig']);
 	}
 
 }

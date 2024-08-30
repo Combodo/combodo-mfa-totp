@@ -2,7 +2,7 @@
  * CSS of the template page
  */
 
-.ibo-2fa--qr-code {
+.ibo-mfa--qr-code {
 	max-width: 50%;
 }
 
@@ -10,12 +10,12 @@
 	display: none;
 }
 
-.ibo-2fa-login-text {
+.ibo-mfa-login-text {
 	font-size: var(--ibo-font-size-150);
 	overflow-wrap: break-word;
 }
 
-.ibo-2fa--code-input {
+.ibo-mfa--code-input {
 	display: inline-block;
 	width: auto;
 	font-family: var(--ibo-font-family-monospace);
@@ -32,7 +32,7 @@ dd {
 	font-size: var(--ibo-font-size-200);
 }
 
-.ibo-2fa--input {
+.ibo-mfa--input {
 	width: auto;
 }
 
