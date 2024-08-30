@@ -38,7 +38,35 @@
           <tracking_level>all</tracking_level>
         </field>
       </fields>
+      <event_listeners>
+        <event_listener id="EVENT_DB_BEFORE_WRITE">
+          <event>EVENT_DB_BEFORE_WRITE</event>
+          <callback>EvtBeforeWriteMFAUserSettingsTOTP</callback>
+          <rank>0</rank>
+        </event_listener>
+      </event_listeners>
       <methods>
+        <method id="EvtBeforeWriteMFAUserSettingsTOTP">
+          <comment>/**
+            * Event Listener for EVENT_DB_BEFORE_WRITE
+            * An object is about to be written into the database.
+            * The object can be modified.
+            *
+            * @param Combodo\iTop\Service\Events\EventData $oEventData Event data object
+            *
+            * @author Eric Espie
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>EventListener</type>
+          <code><![CDATA[	public function EvtBeforeWriteMFAUserSettingsTOTP(Combodo\iTop\Service\Events\EventData $oEventData)
+          {
+            if ($oEventData->Get('is_new')) {
+                Combodo\iTop\MFATotp\Service\MFATOTPService::GetInstance()->OnBeforeCreate($this);
+            }
+          }]]></code>
+        </method>
         <method id="GetConfigurationURLForMyAccountRedirection">
           <comment>/**
             *

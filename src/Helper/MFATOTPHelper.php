@@ -32,4 +32,8 @@ class MFATOTPHelper
 		return 'env-'.utils::GetCurrentEnvironment().'/'.self::MODULE_NAME.'/assets/css/MFATOTP.scss';
 	}
 
+	public static function GetJSFile(): string
+	{
+		return utils::GetAbsoluteUrlModulesRoot().self::MODULE_NAME.'/assets/js/MFATOTP.js';
+	}
 }

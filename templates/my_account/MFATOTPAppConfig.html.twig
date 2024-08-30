@@ -36,10 +36,10 @@
 	{% EndUIFieldSet %}
 
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:UI:CodeValidationTitle'|dict_format(sIssuer, sLabel) } %}
-		{% UIForm Standard {sId:"totp_app_form"} %}
+		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:App:UI:CodeValidation:explain'|dict_s } %}
-				<input type="text" id="totp_app_code" name="totp_app_code" value="" size="6"
-				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginAppCode();"
+				<input type="text" id="totp_code" name="totp_code" value="" size="6"
+				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
 				       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:Code'|dict_s }}">
 			{% EndUIField %}
 		{% EndUIForm %}

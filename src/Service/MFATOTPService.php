@@ -9,11 +9,10 @@ namespace Combodo\iTop\MFATotp\Service;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use LoginTwigContext;
 use LoginWebPage;
-use MetaModel;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
-use UserRights;
+use ParagonIE\ConstantTime\Base32;
 use utils;
 
 class MFATOTPService
@@ -35,9 +34,6 @@ class MFATOTPService
 
 	public function GetTwigContextForConfiguration(MFAUserSettings $oMFAUserSettings): LoginTwigContext
 	{
-		$sUserId = UserRights::GetUserId();
-		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
-		$oMFAUserSettings = MetaModel::NewObject(MFAUserSettingsTOTPApp::class, ['user_id' => $sUserId]);
 		$oTOTPService = new OTPService($oMFAUserSettings);
 
 		$aParams = [];
@@ -46,18 +42,19 @@ class MFATOTPService
 		$aParams['sIssuer'] = $oTOTPService->sIssuer;
 		$aParams['sSecret'] = $oTOTPService->GetSecret();
 
-		$oLoginContext =  new LoginTwigContext();
+		$oLoginContext = new LoginTwigContext();
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
 
 		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aParams));
-		$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPAppConfig.ready.js.twig', $aParams));
+
+		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 		return $oLoginContext;
 	}
 
 	public function GetTwigContextForLoginValidation(MFAUserSettings $oMFAUserSettings): LoginTwigContext
 	{
-		$oLoginContext =  new LoginTwigContext();
+		$oLoginContext = new LoginTwigContext();
 		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
 		$oTOTPService = new OTPService($oMFAUserSettings);
 
@@ -67,18 +64,22 @@ class MFATOTPService
 
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
 
-		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
-		$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPAppValidate.ready.js.twig', $aData));
+		$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
+
+		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 		return $oLoginContext;
 
 	}
+
 	public function HasToDisplayValidation(MFAUserSettingsTOTP $oMFAUserSettings): bool
 	{
 		if ($oMFAUserSettings instanceof MFAUserSettingsTOTPApp) {
-			$sCode = utils::ReadPostedParam('totp_app_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+			$sCode = utils::ReadPostedParam('totp_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+
 			return ($sCode === false);
 		}
+
 		return true;
 	}
 
@@ -89,6 +90,7 @@ class MFATOTPService
 			case self::NO_CODE:
 			case self::WRONG_CODE:
 				LoginWebPage::ResetSession();
+
 				return false;
 
 			default:
@@ -102,7 +104,7 @@ class MFATOTPService
 
 	public function ValidateCode(MFAUserSettingsTOTP $oMFAUserSettings): string
 	{
-		$sCode = utils::ReadPostedParam('totp_app_code', 0, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+		$sCode = utils::ReadPostedParam('totp_code', 0, utils::ENUM_SANITIZATION_FILTER_INTEGER);
 		if ($sCode === 0) {
 			return self::NO_CODE;
 		}
@@ -130,4 +132,8 @@ class MFATOTPService
 		return utils::GetAbsoluteUrlModulePage(MFATOTPHelper::MODULE_NAME, 'index.php', ['operation' => 'MFATOTPMailConfig']);
 	}
 
+	public function OnBeforeCreate(MFAUserSettingsTOTP $oMFAUserSettings): void
+	{
+		$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
+	}
 }
