@@ -29,4 +29,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:App:UI:CodeValidation:explain' => 'Validate the configuration by typing the code received from the authenticator app',
 
 	'MFATOTP:Mail:UI:EnterCode' => 'Enter code received by email',
+
+	'Class:MFAUserSettingsTOTPApp' => 'MFA TOTP by application',
+	'Class:MFAUserSettingsTOTPMail' => 'MFA TOTP by mail',
 ));
