@@ -2,13 +2,14 @@
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
 
+<div class="ibo-mfa-login-text">
+	<p>&nbsp;</p>
+	<p>{{ 'MFATOTP:App:UI:CodeValidationTitle'|dict_format(aData.sIssuer, aData.sLabel)|raw }}</p>
+</div>
 <form id="totp_form" method="post">
-	<div id="login-input">
-		<div>
-			<label for="totp_code">{{ 'MFATOTP:App:UI:EnterCode'|dict_s }}</label>
-			<input type="text" id="totp_code" name="totp_code" value="" size="6"
-			       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
-			       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:Code'|dict_s }}">
-		</div>
+	<div>
+		<input type="text" id="totp_code" name="totp_code" value="" size="6"
+		       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
+		       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:Code'|dict_s }}">
 	</div>
 </form>

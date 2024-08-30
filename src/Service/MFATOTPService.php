@@ -6,9 +6,10 @@
 
 namespace Combodo\iTop\MFATotp\Service;
 
+use Combodo\iTop\Application\Helper\Session;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
+use Dict;
 use LoginTwigContext;
-use LoginWebPage;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
@@ -17,6 +18,11 @@ use utils;
 
 class MFATOTPService
 {
+	// Code validation return values
+	public const NO_CODE = 'no_code';
+	public const WRONG_CODE = 'wrong_code';
+	public const CODE_OK = 'code_ok';
+
 	private static MFATOTPService $oInstance;
 
 	protected function __construct()
@@ -35,18 +41,40 @@ class MFATOTPService
 	public function GetTwigContextForConfiguration(MFAUserSettings $oMFAUserSettings): LoginTwigContext
 	{
 		$oTOTPService = new OTPService($oMFAUserSettings);
+		$aData = [];
 
-		$aParams = [];
-		$aParams['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
-		$aParams['sLabel'] = $oTOTPService->sLabel;
-		$aParams['sIssuer'] = $oTOTPService->sIssuer;
-		$aParams['sSecret'] = $oTOTPService->GetSecret();
+		$sRet = $this->ValidateCode($oMFAUserSettings);
+		switch ($sRet) {
+			case MFATOTPService::WRONG_CODE:
+				$aData['sError'] = Dict::S('MFATOTP:App:UI:NotValidated');
+				break;
+
+			case MFATOTPService::CODE_OK:
+				$oMFAUserSettings->Set('status', 'active');
+				$oMFAUserSettings->AllowWrite();
+				$oMFAUserSettings->DBUpdate();
+
+				Session::Set('mfa-configuration-validated', 'true');
+				$aData['sURL'] = utils::GetAbsoluteUrlAppRoot();
+				$aData['sTitle'] = Dict::S('MFATOTP:UI:Redirection:Title');
+				$oLoginContext = new LoginTwigContext();
+				$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
+				$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+				$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
+
+				return $oLoginContext;
+		}
+
+		$aData['sTitle'] = Dict::S('MFATOTP:App:UI:Config:Title');
+		$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
+		$aData['sLabel'] = $oTOTPService->sLabel;
+		$aData['sIssuer'] = $oTOTPService->sIssuer;
+		$aData['sSecret'] = $oTOTPService->GetSecret();
 
 		$oLoginContext = new LoginTwigContext();
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-
-		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aParams));
-
+		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aData));
+		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
 		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 		return $oLoginContext;
@@ -59,13 +87,13 @@ class MFATOTPService
 		$oTOTPService = new OTPService($oMFAUserSettings);
 
 		$aData = [];
+		$aData['sTitle'] = Dict::S('MFATOTP:App:UI:Validation:Title');
 		$aData['sLabel'] = $oTOTPService->sLabel;
 		$aData['sIssuer'] = $oTOTPService->sIssuer;
 
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-
 		$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
-
+		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
 		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 		return $oLoginContext;
@@ -88,19 +116,17 @@ class MFATOTPService
 		$sRet = $this->ValidateCode($oMFAUserSettings);
 		switch ($sRet) {
 			case self::NO_CODE:
-			case self::WRONG_CODE:
-				LoginWebPage::ResetSession();
+				return false;
 
+			case self::WRONG_CODE:;
+				// this value stays from one call to another ???
+				unset($_POST['totp_code']);
 				return false;
 
 			default:
 				return true;
 		}
 	}
-
-	public const NO_CODE = 'no_code';
-	public const WRONG_CODE = 'wrong_code';
-	public const CODE_OK = 'code_ok';
 
 	public function ValidateCode(MFAUserSettingsTOTP $oMFAUserSettings): string
 	{

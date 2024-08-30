@@ -10,7 +10,9 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFA:login:switch:label:MFAUserSettingsTOTPApp' => 'Use authenticator app',
 	'MFA:login:switch:label:MFAUserSettingsTOTPMail' => 'Send verification code by email',
 
-	'MFATOTP:App:UI:EnterCode' => 'Authenticator app',
+	'MFATOTP:UI:Redirection:Title' => 'Redirecting to home page...',
+
+	'MFATOTP:App:UI:Validation:Title' => 'Authenticator app',
 	'MFATOTP:App:UI:Code' => 'Code',
 	'MFATOTP:App:UI:Config:Title' => 'Configuration for authenticator app',
 	'MFATOTP:App:UI:Configure' => 'Configuration',
