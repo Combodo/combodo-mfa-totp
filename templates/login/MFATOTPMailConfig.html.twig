@@ -2,13 +2,11 @@
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
 
-<div class="ibo-mfa--qr-code">{{ aData.sQRCodeSVG|raw }}</div>
 <div class="ibo-mfa-login-text">
-	<p>{{ 'MFATOTP:App:Secret'|dict_s }} {{ aData.sSecret }}</p>
 	<p>{{ 'MFATOTP:Issuer'|dict_s }} {{ aData.sIssuer }}</p>
-	<p>{{ 'MFATOTP:App:Label'|dict_s }} {{ aData.sLabel }}</p>
+	<p>{{ 'MFATOTP:Mail:Label'|dict_s }} {{ aData.sLabel }}</p>
 	<p>&nbsp;</p>
-	<p>{{ 'MFATOTP:App:CodeValidation:Title'|dict_format(aData.sIssuer, aData.sLabel)|raw }}</p>
+	<p>{{ 'MFATOTP:Mail:CodeValidation:Title'|dict_format(aData.sLabel)|raw }}</p>
 </div>
 <form id="totp_form" method="post">
 	<div>

@@ -1,7 +1,7 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
-{% UIPanel ForInformation { sTitle:'MFATOTP:App:UI:Config:Title'|dict_s } %}
+{% UIPanel ForInformation { sTitle:'MFATOTP:App:Config:Title'|dict_s } %}
 
 	{% if sMessage %}
 		{% UIAlert ForSuccess { sTitle:'' } %}
@@ -15,32 +15,32 @@
 		{% EndUIAlert %}
 	{% endif %}
 
-	{% UIFieldSet Standard { sLegend:'MFATOTP:App:UI:Configure'|dict_s } %}
+	{% UIFieldSet Standard { sLegend:'MFATOTP:App:Configure'|dict_s } %}
 
-		{% UIField Small { sLabel:'MFATOTP:App:UI:ScanQRCode'|dict_s } %}
+		{% UIField Small { sLabel:'MFATOTP:App:ScanQRCode'|dict_s } %}
 			<div>{{ sQRCodeSVG|raw }}</div>
 		{% EndUIField %}
 
-		{% UIField Small { sLabel:'MFATOTP:App:UI:EnterValues'|dict_s } %}
+		{% UIField Small { sLabel:'MFATOTP:App:EnterValues'|dict_s } %}
 		{% EndUIField %}
-		{% UIField Small { sLabel:'MFATOTP:App:UI:Secret'|dict_s } %}
+		{% UIField Small { sLabel:'MFATOTP:App:Secret'|dict_s } %}
 			{{ sSecret }}
 		{% EndUIField %}
-		{% UIField Small { sLabel:'MFATOTP:App:UI:Issuer'|dict_s } %}
+		{% UIField Small { sLabel:'MFATOTP:Issuer'|dict_s } %}
 			{{ sIssuer }}
 		{% EndUIField %}
-		{% UIField Small { sLabel:'MFATOTP:App:UI:Label'|dict_s } %}
+		{% UIField Small { sLabel:'MFATOTP:App:Label'|dict_s } %}
 			{{ sLabel }}
 		{% EndUIField %}
 
 	{% EndUIFieldSet %}
 
-	{% UIFieldSet Standard { sLegend:'MFATOTP:App:UI:CodeValidationTitle'|dict_format(sIssuer, sLabel) } %}
+	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_format(sIssuer, sLabel) } %}
 		{% UIForm Standard {sId:"totp_form"} %}
-			{% UIField Small { sLabel:'MFATOTP:App:UI:CodeValidation:explain'|dict_s } %}
+			{% UIField Small { sLabel:'MFATOTP:App:CodeValidation:explain'|dict_s } %}
 				<input type="text" id="totp_code" name="totp_code" value="" size="6"
 				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
-				       data-role="ibo-input" placeholder="{{ 'MFATOTP:App:UI:Code'|dict_s }}">
+				       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">
 			{% EndUIField %}
 		{% EndUIForm %}
 	{% EndUIFieldSet %}

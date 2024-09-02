@@ -4,12 +4,15 @@
 
 <div class="ibo-mfa-login-text">
 	<p>&nbsp;</p>
-	<p>{{ 'MFATOTP:App:CodeValidation:Title'|dict_format(aData.sIssuer, aData.sLabel)|raw }}</p>
+	<p>{{ 'MFATOTP:Mail:CodeValidation:Title'|dict_format(aData.sLabel) }}</p>
 </div>
 <form id="totp_form" method="post">
 	<div>
 		<input type="text" id="totp_code" name="totp_code" value="" size="6"
 		       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
 		       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">
+	</div>
+	<div>
+		<a onclick="ResendMail();">{{ 'MFATOTP:Mail:ResendEmail:Link'|dict_format(aData.sLabel) }}</a>
 	</div>
 </form>

@@ -6,10 +6,7 @@
 
 namespace Combodo\iTop\MFATotp\Service;
 
-use Combodo\iTop\Application\Helper\Session;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
-use Dict;
-use LoginTwigContext;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
@@ -36,68 +33,6 @@ class MFATOTPService
 		}
 
 		return static::$oInstance;
-	}
-
-	public function GetTwigContextForConfiguration(MFAUserSettings $oMFAUserSettings): LoginTwigContext
-	{
-		$oTOTPService = new OTPService($oMFAUserSettings);
-		$aData = [];
-
-		$sRet = $this->ValidateCode($oMFAUserSettings);
-		switch ($sRet) {
-			case MFATOTPService::WRONG_CODE:
-				$aData['sError'] = Dict::S('MFATOTP:App:UI:NotValidated');
-				break;
-
-			case MFATOTPService::CODE_OK:
-				$oMFAUserSettings->Set('status', 'active');
-				$oMFAUserSettings->AllowWrite();
-				$oMFAUserSettings->DBUpdate();
-
-				Session::Set('mfa-configuration-validated', 'true');
-				$aData['sURL'] = utils::GetAbsoluteUrlAppRoot();
-				$aData['sTitle'] = Dict::S('MFATOTP:UI:Redirection:Title');
-				$oLoginContext = new LoginTwigContext();
-				$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-				$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-				$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
-
-				return $oLoginContext;
-		}
-
-		$aData['sTitle'] = Dict::S('MFATOTP:App:UI:Config:Title');
-		$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
-		$aData['sLabel'] = $oTOTPService->sLabel;
-		$aData['sIssuer'] = $oTOTPService->sIssuer;
-		$aData['sSecret'] = $oTOTPService->GetSecret();
-
-		$oLoginContext = new LoginTwigContext();
-		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aData));
-		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
-
-		return $oLoginContext;
-	}
-
-	public function GetTwigContextForLoginValidation(MFAUserSettings $oMFAUserSettings): LoginTwigContext
-	{
-		$oLoginContext = new LoginTwigContext();
-		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
-		$oTOTPService = new OTPService($oMFAUserSettings);
-
-		$aData = [];
-		$aData['sTitle'] = Dict::S('MFATOTP:App:UI:Validation:Title');
-		$aData['sLabel'] = $oTOTPService->sLabel;
-		$aData['sIssuer'] = $oTOTPService->sIssuer;
-
-		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-		$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
-		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
-
-		return $oLoginContext;
-
 	}
 
 	public function HasToDisplayValidation(MFAUserSettingsTOTP $oMFAUserSettings): bool

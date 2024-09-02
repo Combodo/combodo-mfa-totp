@@ -9,6 +9,7 @@ namespace Combodo\iTop\MFATotp\Service;
 use Combodo\iTop\MFATotp\QRCode\QRCode;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
+use MFAUserSettingsTOTPApp;
 use OTPHP\TOTP;
 
 class OTPService
@@ -65,8 +66,12 @@ class OTPService
 	 */
 	private function GetTotp(): TOTP
 	{
-		$oTotp = TOTP::create($this->oMFAUserSettings->Get('secret')); // New TOTP with custom secret
-		$this->sLabel = $this->oMFAUserSettings->Get('user_id_friendlyname');
+		$oTotp = TOTP::create($this->oMFAUserSettings->Get('secret'), $this->oMFAUserSettings->Get('code_validity')); // New TOTP with custom secret
+		if ($this->oMFAUserSettings instanceof MFAUserSettingsTOTPApp) {
+			$this->sLabel = $this->oMFAUserSettings->Get('user_id_friendlyname');
+		} else {
+			$this->sLabel = $this->oMFAUserSettings->Get('email');
+		}
 		$this->sIssuer = ITOP_APPLICATION;
 		$oTotp->setLabel($this->sLabel);
 		$oTotp->setIssuer($this->sIssuer);
