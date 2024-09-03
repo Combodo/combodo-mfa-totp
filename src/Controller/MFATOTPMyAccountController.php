@@ -7,6 +7,7 @@
 namespace Combodo\iTop\MFATotp\Controller;
 
 use Combodo\iTop\Application\TwigBase\Controller\Controller;
+use Combodo\iTop\MFABase\Helper\MFABaseException;
 use Combodo\iTop\MFABase\Service\MFAUserSettingsService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Combodo\iTop\MFATotp\Service\MFATOTPMailService;
@@ -67,27 +68,29 @@ class MFATOTPMyAccountController extends Controller
 		$sUserId = UserRights::GetUserId();
 		/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
 		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
+		try {
+			MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);
+			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
+			switch ($sRet) {
+				case MFATOTPService::NO_CODE:
+					if ($oMFAUserSettings->Get('validated') === 'yes') {
+						$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+					}
+					break;
 
-		MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);
+				case MFATOTPService::WRONG_CODE:
+					$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
+					break;
 
-		$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
-		switch ($sRet) {
-			case MFATOTPService::NO_CODE:
-				if ($oMFAUserSettings->Get('validated') === 'yes') {
+				case MFATOTPService::CODE_OK:
 					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
-				}
-				break;
-
-			case MFATOTPService::WRONG_CODE:
-				$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
-				break;
-
-			case MFATOTPService::CODE_OK:
-				$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
-				$oMFAUserSettings->Set('validated', 'yes');
-				$oMFAUserSettings->AllowWrite();
-				$oMFAUserSettings->DBUpdate();
-				break;
+					$oMFAUserSettings->Set('validated', 'yes');
+					$oMFAUserSettings->AllowWrite();
+					$oMFAUserSettings->DBUpdate();
+					break;
+			}
+		} catch (MFABaseException $e) {
+			$aParams['sError'] = $e->getMessage();
 		}
 
 		$aParams['sModuleId'] = MFATOTPHelper::MODULE_NAME;

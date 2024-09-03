@@ -28,7 +28,7 @@
 		{% EndUIForm %}
 	{% EndUIFieldSet %}
 
-	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:CodeValidationTitle'|dict_format(sIssuerMail) } %}
+	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
 				<input type="text" id="totp_code" name="totp_code" value="" size="6"

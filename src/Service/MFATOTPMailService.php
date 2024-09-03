@@ -14,6 +14,7 @@ use DateInterval;
 use DateTime;
 use Dict;
 use EMail;
+use Exception;
 use LoginTwigContext;
 use MetaModel;
 use MFAUserSettingsTOTPMail;
@@ -45,7 +46,7 @@ class MFATOTPMailService
 		$sUser = $oMFAUserSettings->Get('user_id_friendlyname');
 		$iCodeValidity = $oMFAUserSettings->Get('code_validity');
 		$oExpirationTime = new DateTime('now');
-		$oExpirationTime->add(new DateInterval("$iCodeValidity s"));
+		$oExpirationTime->add(new DateInterval("PT{$iCodeValidity}S"));
 		$sExpiration = $oExpirationTime->format("H:i");
 
 		// Send the mail
@@ -62,7 +63,11 @@ class MFATOTPMailService
 		$oEmail->SetRecipientFrom($sFrom);
 		$oEmail->SetSubject(Dict::Format('MFATOTP:Mail:EmailSubject', $oTOTPService->sIssuer, $sUser, $sExpiration));
 		$oEmail->SetBody(Dict::Format('MFATOTP:Mail:EmailBody', $oTOTPService->sIssuer, $sUser, $sExpiration, $sCode));
-		$iRes = $oEmail->Send($aIssues, true /* force synchronous exec */);
+		try {
+			$iRes = $oEmail->Send($aIssues, true /* force synchronous exec */);
+		} catch (Exception $e) {
+			throw new MFABaseException($e->getMessage(), 0, $e);
+		}
 		switch ($iRes)
 		{
 			//case EMAIL_SEND_PENDING:
@@ -71,7 +76,7 @@ class MFATOTPMailService
 
 			case EMAIL_SEND_ERROR:
 			default:
-				MFABaseLog::Error('Failed to send the email with the NEW password for '.$sUser.': '.implode(', ', $aIssues));
+				MFABaseLog::Error('Failed to send the email with MFA code for '.$sUser.': '.implode(', ', $aIssues));
 				throw new MFABaseException(Dict::S('MFATOTP:Error:SendMailFailed'));
 		}
 	}
@@ -86,6 +91,7 @@ class MFATOTPMailService
 			$sEmail = 'please.replace@combodo.com';
 		}
 		$oMFAUserSettings->Set('email', $sEmail);
+		$oMFAUserSettings->Set('code_validity', 600);
 	}
 
 	public function OnBeforeUpdate(MFAUserSettingsTOTPMail $oMFAUserSettings): void
@@ -110,7 +116,11 @@ class MFATOTPMailService
 			return $oLoginContext;
 		}
 
-		$this->SendCodeByEmail($oMFAUserSettings);
+		try {
+			$this->SendCodeByEmail($oMFAUserSettings);
+		} catch (MFABaseException $e) {
+			$aData['sError'] = $e->getMessage();
+		}
 
 		$oLoginContext = new LoginTwigContext();
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
@@ -136,7 +146,11 @@ class MFATOTPMailService
 			return $oLoginContext;
 		}
 
-		$this->SendCodeByEmail($oMFAUserSettings);
+		try {
+			$this->SendCodeByEmail($oMFAUserSettings);
+		} catch (MFABaseException $e) {
+			$aData['sError'] = $e->getMessage();
+		}
 
 		$oLoginContext = new LoginTwigContext();
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');

@@ -6,7 +6,7 @@
 	<p>{{ 'MFATOTP:Issuer'|dict_s }} {{ aData.sIssuer }}</p>
 	<p>{{ 'MFATOTP:Mail:Label'|dict_s }} {{ aData.sLabel }}</p>
 	<p>&nbsp;</p>
-	<p>{{ 'MFATOTP:Mail:CodeValidation:Title'|dict_format(aData.sLabel)|raw }}</p>
+	<p>{{ 'MFATOTP:Mail:CodeValidation:Title'|dict_format(aData.sLabel) }}</p>
 </div>
 <form id="totp_form" method="post">
 	<div>
