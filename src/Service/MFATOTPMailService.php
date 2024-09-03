@@ -27,6 +27,7 @@ class MFATOTPMailService
 
 	protected function __construct()
 	{
+		MFABaseLog::Enable();
 	}
 
 	final public static function GetInstance(): MFATOTPMailService
@@ -64,7 +65,7 @@ class MFATOTPMailService
 		$oEmail->SetSubject(Dict::Format('MFATOTP:Mail:EmailSubject', $oTOTPService->sIssuer, $sUser, $sExpiration));
 		$oEmail->SetBody(Dict::Format('MFATOTP:Mail:EmailBody', $oTOTPService->sIssuer, $sUser, $sExpiration, $sCode));
 		try {
-			$iRes = $oEmail->Send($aIssues, true /* force synchronous exec */);
+			$iRes = $oEmail->Send($aIssues, true);
 		} catch (Exception $e) {
 			throw new MFABaseException($e->getMessage(), 0, $e);
 		}

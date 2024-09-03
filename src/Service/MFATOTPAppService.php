@@ -7,6 +7,7 @@
 namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\Application\Helper\Session;
+use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Dict;
 use LoginTwigContext;
@@ -20,6 +21,7 @@ class MFATOTPAppService
 
 	protected function __construct()
 	{
+		MFABaseLog::Enable();
 	}
 
 	final public static function GetInstance(): MFATOTPAppService

@@ -6,6 +6,7 @@
 
 namespace Combodo\iTop\MFATotp\Service;
 
+use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use MFAUserSettings;
 use MFAUserSettingsTOTP;
@@ -24,6 +25,7 @@ class MFATOTPService
 
 	protected function __construct()
 	{
+		MFABaseLog::Enable();
 	}
 
 	final public static function GetInstance(): MFATOTPService
