@@ -10,14 +10,14 @@ SetupWebPage::AddModule(
 		// Identification
 		//
 		'label' => 'MFA TOTP mode',
-		'category' => 'business',
+		'category' => 'authentication',
 
 		// Setup
 		//
 		'dependencies' => [
 			'combodo-mfa-base/3.2.0',
 		],
-		'mandatory' => false,
+		'mandatory' => true,
 		'visible' => true,
 
 		// Components
