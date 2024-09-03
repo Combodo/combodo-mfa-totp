@@ -7,9 +7,13 @@
 namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\Application\Helper\Session;
+use Combodo\iTop\MFABase\Helper\MFABaseException;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
+use DateInterval;
+use DateTime;
 use Dict;
+use EMail;
 use LoginTwigContext;
 use MetaModel;
 use MFAUserSettingsTOTPMail;
@@ -37,11 +41,39 @@ class MFATOTPMailService
 	{
 		$oTOTPService = new OTPService($oMFAUserSettings);
 		$sCode = $oTOTPService->GetCode();
-
 		$sEmail = $oMFAUserSettings->Get('email');
+		$sUser = $oMFAUserSettings->Get('user_id_friendlyname');
+		$iCodeValidity = $oMFAUserSettings->Get('code_validity');
+		$oExpirationTime = new DateTime('now');
+		$oExpirationTime->add(new DateInterval("$iCodeValidity s"));
+		$sExpiration = $oExpirationTime->format("H:i");
 
-		// TODO Send the mail
-		MFABaseLog::Error("Send MFA code", MFABaseLog::CHANNEL_DEFAULT, ['user_id' => $oMFAUserSettings->Get('user_id'), 'email' => $sEmail, 'code' => $sCode]);
+		// Send the mail
+		MFABaseLog::Debug("Send MFA code by email", MFABaseLog::CHANNEL_DEFAULT, [
+			'user_id' => $sUser,
+			'email' => $sEmail,
+			'code' => $sCode,
+			'expiration' => $sExpiration,
+		]);
+
+		$oEmail = new Email();
+		$oEmail->SetRecipientTO($sEmail);
+		$sFrom = MetaModel::GetConfig()->Get('email_default_sender_address');
+		$oEmail->SetRecipientFrom($sFrom);
+		$oEmail->SetSubject(Dict::Format('MFATOTP:Mail:EmailSubject', $oTOTPService->sIssuer, $sUser, $sExpiration));
+		$oEmail->SetBody(Dict::Format('MFATOTP:Mail:EmailBody', $oTOTPService->sIssuer, $sUser, $sExpiration, $sCode));
+		$iRes = $oEmail->Send($aIssues, true /* force synchronous exec */);
+		switch ($iRes)
+		{
+			//case EMAIL_SEND_PENDING:
+			case EMAIL_SEND_OK:
+				break;
+
+			case EMAIL_SEND_ERROR:
+			default:
+				MFABaseLog::Error('Failed to send the email with the NEW password for '.$sUser.': '.implode(', ', $aIssues));
+				throw new MFABaseException(Dict::S('MFATOTP:Error:SendMailFailed'));
+		}
 	}
 
 	public function OnBeforeCreate(MFAUserSettingsTOTPMail $oMFAUserSettings): void
