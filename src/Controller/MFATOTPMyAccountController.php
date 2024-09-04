@@ -19,6 +19,7 @@ use Dict;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
 use MFAUserSettingsTOTPMail;
+use ParagonIE\ConstantTime\Base32;
 use UserRights;
 use utils;
 
@@ -88,11 +89,12 @@ class MFATOTPMyAccountController extends Controller
 				case MFATOTPService::CODE_OK:
 					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
 					$oMFAUserSettings->Set('validated', 'yes');
+					// Only one validation allowed
+					$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
 					$oMFAUserSettings->AllowWrite();
 					$oMFAUserSettings->DBUpdate();
 					break;
 			}
-			//MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);
 		} catch (MFABaseException $e) {
 			$aParams['sError'] = Dict::S('MFATOTP:Error:SendMailFailed');
 		}

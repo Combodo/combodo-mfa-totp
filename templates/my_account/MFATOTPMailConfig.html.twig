@@ -22,35 +22,34 @@
 	{% EndUIAlert %}
 
 	{% UIMultiColumn Standard { } %}
-	{% UIColumn Standard { } %}
+		{% UIColumn Standard { } %}
 
-		{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Settings:Title'|dict_s } %}
-			{% UIForm Standard {sId:"totp_config"} %}
-				{% UIInput ForHidden { sName:'exec_module', sValue:sModuleId } %}
-				{% UIInput ForHidden { sName:'exec_page', sValue:'index.php' } %}
-				{% UIInput ForHidden { sName:'operation', sValue:'MFATOTPMailConfigAction' } %}
-				{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
-					<input type="text" id="email_attribute" name="email_attribute" value="{{ sEmailAttributeValue }}"
-					       class="ibo-input ibo-block ibo-input-string" oninput="SaveMFASettings();"
-					       data-role="ibo-input">
-				{% EndUIField %}
-			{% EndUIForm %}
-		{% EndUIFieldSet %}
+			{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Settings:Title'|dict_s } %}
+				{% UIForm Standard {sId:"totp_config"} %}
+					{% UIInput ForHidden { sName:'exec_module', sValue:sModuleId } %}
+					{% UIInput ForHidden { sName:'exec_page', sValue:'index.php' } %}
+					{% UIInput ForHidden { sName:'operation', sValue:'MFATOTPMailConfigAction' } %}
+					{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
+						<input type="text" id="email_attribute" name="email_attribute" value="{{ sEmailAttributeValue }}"
+						       class="ibo-input ibo-block ibo-input-string" oninput="SaveMFASettings();"
+						       data-role="ibo-input">
+					{% EndUIField %}
+				{% EndUIForm %}
+			{% EndUIFieldSet %}
 
-	{% EndUIColumn %}
-	{% UIColumn Standard { } %}
+			{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
+				{% UIForm Standard {sId:"totp_form"} %}
+					{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
+						<input type="text" id="totp_code" name="totp_code" value="" size="6"
+						       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
+						       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">
+					{% EndUIField %}
+				{% EndUIForm %}
+			{% EndUIFieldSet %}
 
-		{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
-			{% UIForm Standard {sId:"totp_form"} %}
-				{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
-					<input type="text" id="totp_code" name="totp_code" value="" size="6"
-					       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
-					       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">
-				{% EndUIField %}
-			{% EndUIForm %}
-		{% EndUIFieldSet %}
-
-	{% EndUIColumn %}
+		{% EndUIColumn %}
+		{% UIColumn Standard { } %}
+		{% EndUIColumn %}
 	{% EndUIMultiColumn %}
 
 	{% UIButton ForSecondaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, OnClickJsCode:'ResendEmail();' } %}

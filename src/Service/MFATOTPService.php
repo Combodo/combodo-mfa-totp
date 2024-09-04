@@ -97,6 +97,7 @@ class MFATOTPService
 
 	public function OnBeforeCreate(MFAUserSettingsTOTP $oMFAUserSettings): void
 	{
+		// Fill in mandatory value
 		$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
 	}
 }

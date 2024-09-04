@@ -66,7 +66,11 @@ class OTPService
 	 */
 	private function GetTotp(): TOTP
 	{
-		$oTotp = TOTP::create($this->oMFAUserSettings->Get('secret'), $this->oMFAUserSettings->Get('code_validity')); // New TOTP with custom secret
+		$oTotp = TOTP::create($this->oMFAUserSettings->Get('secret'),
+			$this->oMFAUserSettings->Get('code_validity'),
+			TOTP::DEFAULT_DIGEST, TOTP::DEFAULT_DIGITS,
+			$this->oMFAUserSettings->Get('epoch'));
+
 		if ($this->oMFAUserSettings instanceof MFAUserSettingsTOTPApp) {
 			$this->sLabel = $this->oMFAUserSettings->Get('user_id_friendlyname');
 		} else {

@@ -18,6 +18,7 @@ use Exception;
 use LoginTwigContext;
 use MetaModel;
 use MFAUserSettingsTOTPMail;
+use ParagonIE\ConstantTime\Base32;
 use User;
 use utils;
 
@@ -41,6 +42,12 @@ class MFATOTPMailService
 
 	public function SendCodeByEmail(MFAUserSettingsTOTPMail $oMFAUserSettings)
 	{
+		// Update UserSettings
+		$oMFAUserSettings->Set('epoch', time());
+		$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
+		$oMFAUserSettings->AllowWrite();
+		$oMFAUserSettings->DBUpdate();
+
 		$oTOTPService = new OTPService($oMFAUserSettings);
 		$sCode = $oTOTPService->GetCode();
 		$sEmail = $oMFAUserSettings->Get('email');
@@ -108,36 +115,6 @@ class MFATOTPMailService
 		$oTOTPService = new OTPService($oMFAUserSettings);
 		$aData = [];
 
-		$aData['sTitle'] = Dict::S('MFATOTP:Mail:Config:Title');
-		$aData['sLabel'] = $oTOTPService->sLabel;
-		$aData['sIssuer'] = $oTOTPService->sIssuer;
-
-		$oLoginContext = $this->ValidateCode($oMFAUserSettings, $aData);
-		if (!is_null($oLoginContext)) {
-			return $oLoginContext;
-		}
-
-		try {
-			$this->SendCodeByEmail($oMFAUserSettings);
-		} catch (MFABaseException $e) {
-			$aData['sError'] = $e->getMessage();
-		}
-
-		$oLoginContext = new LoginTwigContext();
-		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPMailConfig.html.twig', $aData));
-		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
-
-		return $oLoginContext;
-	}
-
-	public function GetTwigContextForLoginValidation(MFAUserSettingsTOTPMail $oMFAUserSettings): LoginTwigContext
-	{
-		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
-		$oTOTPService = new OTPService($oMFAUserSettings);
-
-		$aData = [];
 		$aData['sTitle'] = Dict::S('MFATOTP:Mail:Validation:Title');
 		$aData['sLabel'] = $oTOTPService->sLabel;
 		$aData['sIssuer'] = $oTOTPService->sIssuer;
@@ -155,13 +132,17 @@ class MFATOTPMailService
 
 		$oLoginContext = new LoginTwigContext();
 		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-		$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPMailValidate.html.twig', $aData));
+		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPMailValidate.html.twig', $aData));
 		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
 		$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPMailValidate.ready.js.twig', $aData));
 		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 		return $oLoginContext;
+	}
 
+	public function GetTwigContextForLoginValidation(MFAUserSettingsTOTPMail $oMFAUserSettings): LoginTwigContext
+	{
+		return $this->GetTwigContextForConfiguration($oMFAUserSettings);
 	}
 
 	private function ValidateCode(MFAUserSettingsTOTPMail $oMFAUserSettings, array &$aData): ?LoginTwigContext
@@ -174,6 +155,8 @@ class MFATOTPMailService
 
 			case MFATOTPService::CODE_OK:
 				$oMFAUserSettings->Set('validated', 'yes');
+				// Only one validation allowed
+				$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
 				$oMFAUserSettings->AllowWrite();
 				$oMFAUserSettings->DBUpdate();
 
