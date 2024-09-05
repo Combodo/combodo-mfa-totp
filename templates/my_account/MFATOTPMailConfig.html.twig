@@ -3,39 +3,21 @@
 
 {% UIPanel ForInformation { sTitle:'MFATOTP:Mail:Config:Title'|dict_s } %}
 
-	{% set message_class = 'ibo-is-hidden' %}
-	{% if sMessage %}
-		{% set message_class = '' %}
-	{% endif %}
-
-	{% UIAlert ForSuccess { sTitle:'', sId:'success-message', AddCSSClass:message_class } %}
-		<div id="success-message-content">{{ sMessage }}</div>
-	{% EndUIAlert %}
-
-	{% set error_class = 'ibo-is-hidden' %}
-	{% if sError %}
-		{% set error_class = '' %}
-	{% endif %}
-
-	{% UIAlert ForFailure { sTitle:'', sId:'error-message', AddCSSClass:error_class } %}
-		<div id="error-message-content">{{ sError }}</div>
-	{% EndUIAlert %}
+	{% include('Alerts.html.twig') %}
 
 	{% UIMultiColumn Standard { } %}
 		{% UIColumn Standard { } %}
 
 			{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Settings:Title'|dict_s } %}
-				{% UIForm Standard {sId:"totp_config"} %}
-					{% UIInput ForHidden { sName:'exec_module', sValue:sModuleId } %}
-					{% UIInput ForHidden { sName:'exec_page', sValue:'index.php' } %}
-					{% UIInput ForHidden { sName:'operation', sValue:'MFATOTPMailConfigAction' } %}
-					{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
-						<input type="text" id="email_attribute" name="email_attribute" value="{{ sEmailAttributeValue }}"
-						       class="ibo-input ibo-block ibo-input-string" oninput="SaveMFASettings();"
-						       data-role="ibo-input">
-					{% EndUIField %}
-				{% EndUIForm %}
+				{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
+					<input type="text" id="email_attribute" name="email_attribute" value="{{ sEmailAttributeValue }}"
+					       class="ibo-input ibo-block ibo-input-string" oninput="SaveMFASettings();"
+					       data-role="ibo-input">
+				{% EndUIField %}
 			{% EndUIFieldSet %}
+
+			{% set MFAUserSettingsClass = 'MFAUserSettingsTOTPMail' %}
+			{% include('DefaultSelection.html.twig') %}
 
 			{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
 				{% UIForm Standard {sId:"totp_form"} %}

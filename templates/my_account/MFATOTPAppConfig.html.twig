@@ -3,17 +3,7 @@
 
 {% UIPanel ForInformation { sTitle:'MFATOTP:App:Config:Title'|dict_s } %}
 
-	{% if sMessage %}
-		{% UIAlert ForSuccess { sTitle:'' } %}
-			{{ sMessage }}
-		{% EndUIAlert %}
-	{% endif %}
-
-	{% if sError %}
-		{% UIAlert ForFailure { sTitle:'' } %}
-			{{ sError }}
-		{% EndUIAlert %}
-	{% endif %}
+	{% include('Alerts.html.twig') %}
 
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:Configure'|dict_s } %}
 
@@ -34,6 +24,9 @@
 		{% EndUIField %}
 
 	{% EndUIFieldSet %}
+
+	{% set MFAUserSettingsClass = 'MFAUserSettingsTOTPApp' %}
+	{% include('DefaultSelection.html.twig') %}
 
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_format(sIssuer, sLabel) } %}
 		{% UIForm Standard {sId:"totp_form"} %}

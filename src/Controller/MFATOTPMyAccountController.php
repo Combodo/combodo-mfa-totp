@@ -8,6 +8,7 @@ namespace Combodo\iTop\MFATotp\Controller;
 
 use Combodo\iTop\Application\TwigBase\Controller\Controller;
 use Combodo\iTop\MFABase\Helper\MFABaseException;
+use Combodo\iTop\MFABase\Helper\MFABaseHelper;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFABase\Service\MFAUserSettingsService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
@@ -61,6 +62,7 @@ class MFATOTPMyAccountController extends Controller
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());
 		$this->AddLinkedScript(MFATOTPHelper::GetJSFile());
+		$this->AddLinkedScript(MFABaseHelper::GetJSFile());
 
 		$this->DisplayPage($aParams);
 	}
@@ -105,6 +107,7 @@ class MFATOTPMyAccountController extends Controller
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());
 		$this->AddLinkedScript(MFATOTPHelper::GetJSFile());
+		$this->AddLinkedScript(MFABaseHelper::GetJSFile());
 
 		$this->DisplayPage($aParams);
 	}

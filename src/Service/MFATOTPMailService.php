@@ -105,7 +105,7 @@ class MFATOTPMailService
 	public function OnBeforeUpdate(MFAUserSettingsTOTPMail $oMFAUserSettings): void
 	{
 		// If email changed invalidate settings (need verification again)
-		if (in_array('email', $oMFAUserSettings->ListChanges())) {
+		if (array_key_exists('email', $oMFAUserSettings->ListChanges())) {
 			$oMFAUserSettings->Set('validated', 'no');
 		}
 	}
