@@ -32,6 +32,7 @@ class MFATOTPMyAccountController extends Controller
 		$sUserId = UserRights::GetUserId();
 		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
 		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::class);
+		$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 
 		$oTOTPService = new OTPService($oMFAUserSettings);
 
@@ -73,6 +74,7 @@ class MFATOTPMyAccountController extends Controller
 		$sUserId = UserRights::GetUserId();
 		/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
 		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
+		$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 		try {
 			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
 			switch ($sRet) {
@@ -102,7 +104,6 @@ class MFATOTPMyAccountController extends Controller
 		}
 
 		$aParams['sModuleId'] = MFATOTPHelper::MODULE_NAME;
-		$aParams['sEmailAttributeValue'] = $oMFAUserSettings->Get('email');
 		$aParams['sAjaxURL'] = utils::GetAbsoluteUrlExecPage();
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());

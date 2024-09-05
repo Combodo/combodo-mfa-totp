@@ -1,9 +1,11 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
-{% UIPanel ForInformation { sTitle:'MFATOTP:App:Config:Title'|dict_s } %}
+{% extends "MFAUserSettingsConfig.html.twig" %}
 
-	{% include('Alerts.html.twig') %}
+{% set sTitle = 'MFATOTP:App:Config:Title'|dict_s %}
+
+{% block configuration %}
 
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:Configure'|dict_s } %}
 
@@ -15,6 +17,8 @@
 		{% EndUIField %}
 		{% UIField Small { sLabel:'MFATOTP:App:Secret'|dict_s } %}
 			{{ sSecret }}
+			{% set jscopy = 'WriteClipboardText("' ~ sSecret ~ '", "' ~ 'UI:CopyValue:Done'|dict_s ~ '");' %}
+			{% UIButton IconAction { sIconClasses:'fas fa-clone copypaste', sTooltipText:'UI:CopyValue', OnClickJsCode:jscopy } %}
 		{% EndUIField %}
 		{% UIField Small { sLabel:'MFATOTP:Issuer'|dict_s } %}
 			{{ sIssuer }}
@@ -25,8 +29,9 @@
 
 	{% EndUIFieldSet %}
 
-	{% set MFAUserSettingsClass = 'MFAUserSettingsTOTPApp' %}
-	{% include('DefaultSelection.html.twig') %}
+{% endblock %}
+
+{% block validation %}
 
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_format(sIssuer, sLabel) } %}
 		{% UIForm Standard {sId:"totp_form"} %}
@@ -37,4 +42,5 @@
 			{% EndUIField %}
 		{% EndUIForm %}
 	{% EndUIFieldSet %}
-{% EndUIPanel %}
+
+{% endblock %}
