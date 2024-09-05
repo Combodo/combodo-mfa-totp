@@ -18,7 +18,7 @@
 		{% UIField Small { sLabel:'MFATOTP:App:Secret'|dict_s } %}
 			{{ sSecret }}
 			{% set jscopy = 'WriteClipboardText("' ~ sSecret ~ '", "' ~ 'UI:CopyValue:Done'|dict_s ~ '");' %}
-			{% UIButton IconAction { sIconClasses:'fas fa-clone copypaste', sTooltipText:'UI:CopyValue', OnClickJsCode:jscopy } %}
+			{% UIButton IconAction { sIconClasses:'fas fa-clone copypaste', sTooltipText:'UI:CopyValue'|dict_s, OnClickJsCode:jscopy } %}
 		{% EndUIField %}
 		{% UIField Small { sLabel:'MFATOTP:Issuer'|dict_s } %}
 			{{ sIssuer }}
