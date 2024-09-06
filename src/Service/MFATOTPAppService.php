@@ -58,6 +58,9 @@ class MFATOTPAppService
 				$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
 
 				return $oLoginContext;
+
+			case MFATOTPService::NO_CODE:
+				break;
 		}
 
 		$aData['sTitle'] = Dict::S('MFATOTP:App:Config:Title');
