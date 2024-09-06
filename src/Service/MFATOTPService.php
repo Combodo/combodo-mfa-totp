@@ -69,10 +69,20 @@ class MFATOTPService
 	{
 		$sCode = utils::ReadPostedParam('totp_code', 0, utils::ENUM_SANITIZATION_FILTER_INTEGER);
 		if ($sCode === 0) {
+			MFABaseLog::Debug("TOTP code validation : no 'totp_code' received", null,
+				[
+					'class' => get_class($oMFAUserSettings),
+					'user_id' => $oMFAUserSettings->Get('user_id'),
+				]);
 			return self::NO_CODE;
 		}
 
 		if ($sCode === false) {
+			MFABaseLog::Debug("TOTP code validation : invalid 'totp_code' received (sanitization)", null,
+				[
+					'class' => get_class($oMFAUserSettings),
+					'user_id' => $oMFAUserSettings->Get('user_id'),
+				]);
 			return self::WRONG_CODE;
 		}
 
@@ -80,9 +90,19 @@ class MFATOTPService
 		$sRealCode = $oTOTPService->GetCode();
 
 		if ($sRealCode === $sCode) {
+			MFABaseLog::Debug("TOTP code validation : correct 'totp_code' received", null,
+				[
+					'class' => get_class($oMFAUserSettings),
+					'user_id' => $oMFAUserSettings->Get('user_id'),
+				]);
 			return self::CODE_OK;
 		}
 
+		MFABaseLog::Debug("TOTP code validation : wrong 'totp_code' received", null,
+			[
+				'class' => get_class($oMFAUserSettings),
+				'user_id' => $oMFAUserSettings->Get('user_id'),
+			]);
 		return self::WRONG_CODE;
 	}
 
