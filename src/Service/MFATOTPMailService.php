@@ -18,7 +18,6 @@ use Exception;
 use LoginTwigContext;
 use MetaModel;
 use MFAUserSettingsTOTPMail;
-use ParagonIE\ConstantTime\Base32;
 use User;
 use utils;
 
@@ -44,7 +43,7 @@ class MFATOTPMailService
 	{
 		// Update UserSettings
 		$oMFAUserSettings->Set('epoch', time());
-		$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
+		MFATOTPService::GetInstance()->RegenerateSecret($oMFAUserSettings);
 		$oMFAUserSettings->AllowWrite();
 		$oMFAUserSettings->DBUpdate();
 
@@ -156,7 +155,7 @@ class MFATOTPMailService
 			case MFATOTPService::CODE_OK:
 				$oMFAUserSettings->Set('validated', 'yes');
 				// Only one validation allowed
-				$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
+				MFATOTPService::GetInstance()->RegenerateSecret($oMFAUserSettings);
 				$oMFAUserSettings->AllowWrite();
 				$oMFAUserSettings->DBUpdate();
 

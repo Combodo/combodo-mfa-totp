@@ -20,7 +20,6 @@ use Dict;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
 use MFAUserSettingsTOTPMail;
-use ParagonIE\ConstantTime\Base32;
 use UserRights;
 use utils;
 
@@ -94,7 +93,7 @@ class MFATOTPMyAccountController extends Controller
 					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
 					$oMFAUserSettings->Set('validated', 'yes');
 					// Only one validation allowed
-					$oMFAUserSettings->Set('secret', Base32::encodeUpper(random_bytes(64)));
+					MFATOTPService::GetInstance()->RegenerateSecret($oMFAUserSettings);
 					$oMFAUserSettings->AllowWrite();
 					$oMFAUserSettings->DBUpdate();
 					break;

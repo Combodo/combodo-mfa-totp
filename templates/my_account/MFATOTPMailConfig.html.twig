@@ -19,6 +19,8 @@
 
 {% block validation%}
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
+		{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s OnClickJsCode:'ResendEmail();' } %}
+
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
 				<input type="text" id="totp_code" name="totp_code" value="" size="6"
@@ -28,7 +30,6 @@
 		{% EndUIForm %}
 	{% EndUIFieldSet %}
 
-	{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, OnClickJsCode:'ResendEmail();' } %}
 
 {% endblock %}
 
