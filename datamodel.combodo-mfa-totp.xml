@@ -147,7 +147,7 @@
     </class>
     <class id="MFAUserSettingsTOTPApp" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>bizmodel,searchable,MFAMode</category>
+        <category>bizmodel,searchable,DeniableMFAMode,SelectableMFAMode</category>
         <abstract>false</abstract>
         <db_table>mfa_user_settings_totp_app</db_table>
         <style>
@@ -242,7 +242,7 @@
     </class>
     <class id="MFAUserSettingsTOTPMail" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>bizmodel,searchable,MFAMode</category>
+        <category>bizmodel,searchable,DeniableMFAMode,SelectableMFAMode</category>
         <abstract>false</abstract>
         <db_table>mfa_user_settings_totp_mail</db_table>
         <style>
