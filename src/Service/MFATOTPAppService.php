@@ -7,9 +7,11 @@
 namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\Application\Helper\Session;
+use Combodo\iTop\MFABase\Helper\MFABaseException;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Dict;
+use Exception;
 use LoginTwigContext;
 use MFAUserSettingsTOTPApp;
 use utils;
@@ -33,69 +35,102 @@ class MFATOTPAppService
 		return static::$oInstance;
 	}
 
+	/**
+	 * @param \MFAUserSettingsTOTPApp $oMFAUserSettings
+	 *
+	 * @return \LoginTwigContext
+	 * @throws \Combodo\iTop\MFABase\Helper\MFABaseException
+	 */
 	public function GetTwigContextForConfiguration(MFAUserSettingsTOTPApp $oMFAUserSettings): LoginTwigContext
 	{
-		$oTOTPService = new OTPService($oMFAUserSettings);
 		$aData = [];
+		try {
+			$oTOTPService = new OTPService($oMFAUserSettings);
 
-		$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
-		switch ($sRet) {
-			case MFATOTPService::WRONG_CODE:
-				$aData['sError'] = Dict::S('MFATOTP:NotValidated');
-				break;
+			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
+			switch ($sRet) {
+				case MFATOTPService::WRONG_CODE:
+					$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+					break;
 
-			case MFATOTPService::CODE_OK:
-				$oMFAUserSettings->Set('validated', 'yes');
-				$oMFAUserSettings->AllowWrite();
-				$oMFAUserSettings->DBUpdate();
+				case MFATOTPService::CODE_OK:
+					$oMFAUserSettings->Set('validated', 'yes');
+					$oMFAUserSettings->AllowWrite();
+					$oMFAUserSettings->DBUpdate();
 
-				Session::Set('mfa-configuration-validated', 'true');
-				$aData['sURL'] = utils::GetAbsoluteUrlAppRoot();
-				$aData['sTitle'] = Dict::S('MFATOTP:Redirection:Title');
-				$oLoginContext = new LoginTwigContext();
-				$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-				$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-				$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
+					Session::Set('mfa_configuration_validated', 'true');
+					$aData['sURL'] = utils::GetAbsoluteUrlAppRoot();
+					$aData['sTitle'] = Dict::S('MFATOTP:Redirection:Title');
+					$oLoginContext = new LoginTwigContext();
+					$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
+					$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+					$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
 
-				return $oLoginContext;
+					return $oLoginContext;
 
-			case MFATOTPService::NO_CODE:
-				break;
+				case MFATOTPService::NO_CODE:
+					break;
+			}
+
+			$aData['sTitle'] = Dict::S('MFATOTP:App:Config:Title');
+			$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
+			$aData['sLabel'] = $oTOTPService->sLabel;
+			$aData['sIssuer'] = $oTOTPService->sIssuer;
+			$aData['sSecret'] = $oTOTPService->GetSecret();
+		} catch (MFABaseException $e) {
+			$aData['sError'] = 'MFA Configuration failed';
+		} catch (Exception $e) {
+			$aData['sError'] = 'MFA Configuration failed';
+			MFABaseLog::Info(__METHOD__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
 		}
 
-		$aData['sTitle'] = Dict::S('MFATOTP:App:Config:Title');
-		$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
-		$aData['sLabel'] = $oTOTPService->sLabel;
-		$aData['sIssuer'] = $oTOTPService->sIssuer;
-		$aData['sSecret'] = $oTOTPService->GetSecret();
+		try {
+			$oLoginContext = new LoginTwigContext();
+			$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
+			$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aData));
+			$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+			$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
-		$oLoginContext = new LoginTwigContext();
-		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-		$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aData));
-		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
-
-		return $oLoginContext;
+			return $oLoginContext;
+		} catch (Exception $e) {
+			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+		}
 	}
 
+	/**
+	 * @param \MFAUserSettingsTOTPApp $oMFAUserSettings
+	 *
+	 * @return \LoginTwigContext
+	 * @throws \Combodo\iTop\MFABase\Helper\MFABaseException
+	 */
 	public function GetTwigContextForLoginValidation(MFAUserSettingsTOTPApp $oMFAUserSettings): LoginTwigContext
 	{
-		$oLoginContext = new LoginTwigContext();
-		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
-		$oTOTPService = new OTPService($oMFAUserSettings);
-
 		$aData = [];
-		$aData['sTitle'] = Dict::S('MFATOTP:App:Validation:Title');
-		$aData['sLabel'] = $oTOTPService->sLabel;
-		$aData['sIssuer'] = $oTOTPService->sIssuer;
+		try {
+			/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
+			$oTOTPService = new OTPService($oMFAUserSettings);
 
-		$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-		$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
-		$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-		$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
+			$aData['sTitle'] = Dict::S('MFATOTP:App:Validation:Title');
+			$aData['sLabel'] = $oTOTPService->sLabel;
+			$aData['sIssuer'] = $oTOTPService->sIssuer;
+		} catch (MFABaseException $e) {
+			$aData['sError'] = 'MFA Configuration failed';
+		} catch (Exception $e) {
+			$aData['sError'] = 'MFA Configuration failed';
+			MFABaseLog::Info(__METHOD__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
+		}
 
-		return $oLoginContext;
+		try {
+			$oLoginContext = new LoginTwigContext();
+			$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
+			$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
+			$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+			$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
+			return $oLoginContext;
+		} catch (Exception $e) {
+			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+		}
 	}
 
 }
