@@ -5,7 +5,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-mfa-totp/3.2.0',
+	'combodo-mfa-totp/1.0.0',
 	[
 		// Identification
 		//
@@ -15,7 +15,7 @@ SetupWebPage::AddModule(
 		// Setup
 		//
 		'dependencies' => [
-			'combodo-mfa-base/3.2.0',
+			'combodo-mfa-base/1.0.0',
 		],
 		'mandatory' => true,
 		'visible' => true,
