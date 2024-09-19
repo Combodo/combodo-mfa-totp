@@ -7,10 +7,11 @@
  */
 
 Dict::Add('EN US', 'English', 'English', array(
-	'MFA:login:switch:label:MFAUserSettingsTOTPApp' => 'Use authenticator app',
-	'MFA:login:switch:label:MFAUserSettingsTOTPMail' => 'Send verification code by email',
 	'combodo-mfa-totp/Operation:MFATOTPMailConfig/Title' => 'Configure MFA by email',
 	'combodo-mfa-totp/Operation:MFATOTPAppConfig/Title' => 'Configure authenticator app',
+
+	'MFA:login:switch:label:MFAUserSettingsTOTPApp' => 'Use authenticator app',
+	'MFA:login:switch:label:MFAUserSettingsTOTPMail' => 'Send verification code by email',
 
 	'MFATOTP:Redirection:Title' => 'Redirecting to home page...',
 	'MFATOTP:Validated' => 'Authenticator app Validated',
