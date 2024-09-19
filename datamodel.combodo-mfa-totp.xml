@@ -156,7 +156,14 @@
           </icon>
         </style>
         <naming>
-          <attributes/>
+          <attributes>
+            <attribute id="user_id_friendlyname"/>
+            <attribute id="finalclass"/>
+          </attributes>
+          <complementary_attributes>
+            <attribute id="user_id_friendlyname"/>
+            <attribute id="finalclass"/>
+          </complementary_attributes>
         </naming>
         <reconciliation>
           <attributes>
@@ -175,7 +182,7 @@
           </rule>
         </uniqueness_rules>
       </properties>
-      <fields></fields>
+      <fields/>
       <methods>
         <method id="GetTwigContextForConfiguration">
           <comment>/**
@@ -251,7 +258,14 @@
           </icon>
         </style>
         <naming>
-          <attributes/>
+          <attributes>
+            <attribute id="user_id_friendlyname"/>
+            <attribute id="finalclass"/>
+          </attributes>
+          <complementary_attributes>
+            <attribute id="user_id_friendlyname"/>
+            <attribute id="finalclass"/>
+          </complementary_attributes>
         </naming>
         <reconciliation>
           <attributes>
