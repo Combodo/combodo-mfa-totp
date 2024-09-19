@@ -12,6 +12,7 @@ use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Dict;
 use Exception;
+use LoginBlockExtension;
 use LoginTwigContext;
 use MFAUserSettingsTOTPApp;
 use utils;
@@ -55,6 +56,7 @@ class MFATOTPAppService
 
 				case MFATOTPService::CODE_OK:
 					$oMFAUserSettings->Set('validated', 'yes');
+					$oMFAUserSettings->Set('is_default', 'yes');
 					$oMFAUserSettings->AllowWrite();
 					$oMFAUserSettings->DBUpdate();
 
@@ -63,8 +65,8 @@ class MFATOTPAppService
 					$aData['sTitle'] = Dict::S('MFATOTP:Redirection:Title');
 					$oLoginContext = new LoginTwigContext();
 					$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-					$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
-					$oLoginContext->AddBlockExtension('script', new \LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
+					$oLoginContext->AddBlockExtension('mfa_title', new LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+					$oLoginContext->AddBlockExtension('script', new LoginBlockExtension('MFATOTPRedirect.ready.js.twig', $aData));
 
 					return $oLoginContext;
 
@@ -87,8 +89,8 @@ class MFATOTPAppService
 		try {
 			$oLoginContext = new LoginTwigContext();
 			$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-			$oLoginContext->AddBlockExtension('mfa_configuration', new \LoginBlockExtension('MFATOTPAppConfig.html.twig', $aData));
-			$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+			$oLoginContext->AddBlockExtension('mfa_configuration', new LoginBlockExtension('MFATOTPAppConfig.html.twig', $aData));
+			$oLoginContext->AddBlockExtension('mfa_title', new LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
 			$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 			return $oLoginContext;
@@ -123,8 +125,8 @@ class MFATOTPAppService
 		try {
 			$oLoginContext = new LoginTwigContext();
 			$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
-			$oLoginContext->AddBlockExtension('mfa_validation', new \LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
-			$oLoginContext->AddBlockExtension('mfa_title', new \LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
+			$oLoginContext->AddBlockExtension('mfa_validation', new LoginBlockExtension('MFATOTPAppValidate.html.twig', $aData));
+			$oLoginContext->AddBlockExtension('mfa_title', new LoginBlockExtension('MFATOTPTitle.html.twig', $aData));
 			$oLoginContext->AddJsFile(MFATOTPHelper::GetJSFile());
 
 			return $oLoginContext;

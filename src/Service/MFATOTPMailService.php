@@ -217,7 +217,8 @@ class MFATOTPMailService
 
 				case MFATOTPService::CODE_OK:
 					$oMFAUserSettings->Set('validated', 'yes');
-					// Only one validation allowed
+					$oMFAUserSettings->Set('is_default', 'yes');
+					// Only one validation allowed (one time password)
 					MFATOTPService::GetInstance()->RegenerateSecret($oMFAUserSettings);
 					$oMFAUserSettings->AllowWrite();
 					$oMFAUserSettings->DBUpdate();
