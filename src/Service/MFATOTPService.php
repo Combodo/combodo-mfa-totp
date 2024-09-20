@@ -72,20 +72,18 @@ class MFATOTPService
 			$sRet = $this->ValidateCode($oMFAUserSettings);
 			switch ($sRet) {
 				case self::NO_CODE:
-					return false;
-
 				case self::WRONG_CODE:
-					;
-					// this value stays from one call to another ???
-					unset($_POST['totp_code']);
-
 					return false;
 
 				default:
 					return true;
 			}
+		} catch (MFABaseException $e) {
+			throw $e;
 		} catch (Exception $e) {
 			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+		} finally {
+			unset($_POST['totp_code']);
 		}
 	}
 

@@ -3,7 +3,7 @@
   <classes>
     <class id="MFAUserSettingsTOTP" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>grant_by_profile,searchable</category>
+        <category>grant_by_profile</category>
         <abstract>true</abstract>
         <db_table>mfa_user_settings_totp</db_table>
         <style>
@@ -147,7 +147,7 @@
     </class>
     <class id="MFAUserSettingsTOTPApp" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>grant_by_profile,searchable,DeniableMFAMode,SelectableMFAMode</category>
+        <category>grant_by_profile,DeniableMFAMode,SelectableMFAMode</category>
         <abstract>false</abstract>
         <db_table>mfa_user_settings_totp_app</db_table>
         <style>
@@ -249,7 +249,7 @@
     </class>
     <class id="MFAUserSettingsTOTPMail" _created_in="combodo-mfa-totp" _delta="define">
       <properties>
-        <category>grant_by_profile,searchable,searchable,DeniableMFAMode,SelectableMFAMode</category>
+        <category>grant_by_profile,DeniableMFAMode,SelectableMFAMode</category>
         <abstract>false</abstract>
         <db_table>mfa_user_settings_totp_mail</db_table>
         <style>
