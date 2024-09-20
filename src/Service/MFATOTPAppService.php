@@ -83,7 +83,7 @@ class MFATOTPAppService
 			$aData['sError'] = 'MFA Configuration failed';
 		} catch (Exception $e) {
 			$aData['sError'] = 'MFA Configuration failed';
-			MFABaseLog::Info(__METHOD__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
+			MFABaseLog::Error(__METHOD__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
 		}
 
 		try {
