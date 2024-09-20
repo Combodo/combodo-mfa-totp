@@ -56,7 +56,7 @@ class MFATOTPService
 
 			return true;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 
@@ -81,7 +81,7 @@ class MFATOTPService
 		} catch (MFABaseException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		} finally {
 			unset($_POST['totp_code']);
 		}
@@ -140,7 +140,7 @@ class MFATOTPService
 		} catch (MFABaseException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 
@@ -161,7 +161,7 @@ class MFATOTPService
 		} catch (MFABaseException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 
@@ -179,7 +179,7 @@ class MFATOTPService
 		} catch (MFABaseException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 
@@ -196,7 +196,7 @@ class MFATOTPService
 		} catch (MFABaseException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 }

@@ -28,7 +28,7 @@
           <default_value/>
           <is_null_allowed>false</is_null_allowed>
           <validation_pattern/>
-          <tracking_level>none</tracking_level>
+          <tracking_level>all</tracking_level>
         </field>
         <field id="code_validity" xsi:type="AttributeDuration">
           <sql>code_validity</sql>

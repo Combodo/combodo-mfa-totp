@@ -83,7 +83,7 @@ class MFATOTPAppService
 			$aData['sError'] = 'MFA Configuration failed';
 		} catch (Exception $e) {
 			$aData['sError'] = 'MFA Configuration failed';
-			MFABaseLog::Error(__METHOD__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
+			MFABaseLog::Error(__FUNCTION__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
 		}
 
 		try {
@@ -95,7 +95,7 @@ class MFATOTPAppService
 
 			return $oLoginContext;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 
@@ -119,7 +119,7 @@ class MFATOTPAppService
 			$aData['sError'] = 'MFA Configuration failed';
 		} catch (Exception $e) {
 			$aData['sError'] = 'MFA Configuration failed';
-			MFABaseLog::Info(__METHOD__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
+			MFABaseLog::Info(__FUNCTION__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
 		}
 
 		try {
@@ -131,7 +131,7 @@ class MFATOTPAppService
 
 			return $oLoginContext;
 		} catch (Exception $e) {
-			throw new MFABaseException(__METHOD__.' failed', 0, $e);
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
 

@@ -127,7 +127,7 @@ class MFATOTPMyAccountController extends Controller
 			$aParams['code'] = 0;
 			$aParams['message'] = Dict::Format('MFATOTP:Mail:Settings:Saved:Done', $sEmail);
 		} catch (CoreCannotSaveObjectException $e) {
-			MFABaseLog::Error(__METHOD__.' '.$e->getMessage());
+			MFABaseLog::Error(__FUNCTION__.' '.$e->getMessage());
 			$aParams['code'] = 400;
 			$aParams['error'] = Dict::S('MFATOTP:Error:SaveSettingsFailed');
 		}

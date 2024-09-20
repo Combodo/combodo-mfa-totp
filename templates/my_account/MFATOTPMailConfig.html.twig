@@ -19,7 +19,7 @@
 
 {% block validation%}
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
-		{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s OnClickJsCode:'ResendEmail();' } %}
+		{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s, OnClickJsCode:"ResendEmail();" } %}
 
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
