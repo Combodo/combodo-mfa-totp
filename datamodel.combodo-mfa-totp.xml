@@ -53,6 +53,26 @@
         </event_listener>
       </event_listeners>
       <methods>
+        <method id="EvtSetAttributeFlagsMFAUserSettings">
+          <comment>/**
+            * Event Listener for EVENT_DB_BEFORE_WRITE
+            * An object is about to be written into the database.
+            * The object can be modified.
+            *
+            * @param Combodo\iTop\Service\Events\EventData $oEventData Event data object
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <type>EventListener</type>
+          <code><![CDATA[	public function EvtSetAttributeFlagsMFAUserSettings(Combodo\iTop\Service\Events\EventData $oEventData)
+          {
+                $this->AddAttributeFlags('code_validity', OPT_ATT_READONLY);
+                $this->AddAttributeFlags('epoch', OPT_ATT_READONLY);
+                $this->AddAttributeFlags('secret', OPT_ATT_READONLY);
+                parent::EvtSetAttributeFlagsMFAUserSettings($oEventData);
+          }]]></code>
+        </method>
         <method id="EvtBeforeWriteMFAUserSettingsTOTP">
           <comment>/**
             * Event Listener for EVENT_DB_BEFORE_WRITE
