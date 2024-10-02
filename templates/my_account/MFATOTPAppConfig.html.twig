@@ -32,7 +32,6 @@
 {% endblock %}
 
 {% block validation %}
-
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_format(sIssuer, sLabel) } %}
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:App:CodeValidation:explain'|dict_s } %}

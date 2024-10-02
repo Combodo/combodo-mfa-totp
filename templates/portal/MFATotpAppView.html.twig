@@ -1,0 +1,70 @@
+{# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
+{# @license     http://opensource.org/licenses/AGPL-3.0 #}
+
+<div class="col-sm-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{{ 'MFATOTP:App:Config:Title'|dict_s }}</h3>
+		</div>
+		<div class="panel-body">
+			<div class="form_alerts">
+				<div class="alert alert-success" role="alert" style="display: none;"></div>
+				<div class="alert alert-warning" role="alert" style="display: none;"></div>
+				<div class="alert alert-error alert-danger" role="alert" style="display: none;"></div>
+			</div>
+
+			<table>
+				<tbody>
+					<tr class="even">
+						<td>
+							<div class="form_field_label">
+								<label class="control-label">{{ 'MFATOTP:Issuer'|dict_s }}</label>
+							</div>
+							<pre>{{ aData.sIssuer|raw }}</pre>
+						</td>
+						<td>
+							<div class="form_field_label">
+								<label class="control-label">{{ 'MFATOTP:App:Label'|dict_s }}</label>
+							</div>
+							<pre>{{ aData.sLabel|raw }}</pre>
+						</td>
+					</tr>
+					<tr class="even">
+						<td>
+							<div class="form_field_label">
+								<label class="control-label">{{ 'MFATOTP:App:ScanQRCode'|dict_s }}</label>
+							</div>
+							<pre>{{ aData.sQRCodeSVG|raw }}</pre>
+						</td>
+						<td>
+							<div class="form_field_label">
+								<label class="control-label">{{ 'MFATOTP:App:Secret'|dict_s }}</label>
+							</div>
+							<pre>{{ aData.sSecret|raw }}</pre>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!--div-- class="panel-heading">
+				<h3 class="panel-title">{{ 'MFATOTP:App:CodeValidation:Title'|dict_format(aData.sIssuer, aData.sLabel) }}</h3>
+			</div-->
+
+			<div class="form_field_label">
+				<label class="control-label">{{ 'MFATOTP:App:CodeValidation:explain'|dict_s }}</label>
+			</div>
+			{% set sFormId = "form_mfa_configure" ~ aData.sAction ~ "_" ~ aData.sClass %}
+			<form id="{{ sFormId }}" class="" style="display:inline-block;" method="POST">
+				<input type="hidden" name="action" value="{{ aData.sAction }}">
+				<input type="hidden" name="operation" value="configure">
+				<input type="hidden" name="class" value="{{ aData.sClass }}">
+				{% set JS = "let sCode = $(\"#totp_code\").val(); if (sCode.length === 6) { $(" ~ sFormId ~").trigger(\"submit\"); }"  %}
+				<input type="text" id="totp_code" name="totp_code" value="" size="6"
+				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="{{JS}}; return false;"
+				       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">
+			</form>
+		</div>
+	</div>
+</div>
+
+
