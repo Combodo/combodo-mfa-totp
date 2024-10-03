@@ -7,6 +7,7 @@ use Combodo\iTop\MFABase\Service\MFAUserSettingsService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Combodo\iTop\MFATotp\Service\MFATOTPService;
 use Combodo\iTop\MFATotp\Service\OTPService;
+use Combodo\iTop\Portal\Hook\iPortalTabContentExtension;
 use Combodo\iTop\Portal\Hook\iPortalTabSectionExtension;
 use Combodo\iTop\Portal\Twig\PortalBlockExtension;
 use Combodo\iTop\Portal\Twig\PortalTwigContext;
@@ -15,8 +16,9 @@ use MFAUserSettingsTOTPApp;
 use UserRights;
 use utils;
 
-class MFATotpAppPortalTabSectionExtension implements iPortalTabSectionExtension
+class MFATotpAppPortalTabSectionExtension implements iPortalTabContentExtension
 {
+	private $MFAUserSettings;
 
 	/**
 	 * @inheritDoc
@@ -47,32 +49,19 @@ class MFATotpAppPortalTabSectionExtension implements iPortalTabSectionExtension
 		return 'p_user_profile_brick';
 	}
 
-	public function GetPortalTwigContext(): PortalTwigContext
+	/**
+	 * Handle actions based on posted vars
+	 */
+	public function HandlePortalForm(array &$aData): void
 	{
-		$oPortalTwigContext = new PortalTwigContext();
-
 		$sUserId = UserRights::GetUserId();
 		/** @var MFAUserSettingsTOTPApp $oUserSettings */
-		$oUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::Class);
+		$this->MFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::Class);
 
-		/*if (utils::ReadPostedParam("operation") === "rebuild_code"){
-			$oUserSettingsRecoveryCodesService->RebuildCodes($oUserSettings);
-		}*/
-
-		$oTOTPService = new OTPService($oUserSettings);
-
-		$aData = [];
-		$aData['sAction'] = MFAPortalService::GetInstance()->GetSelectedAction();
-		$aData['sClass'] = MFAUserSettingsTOTPApp::class;
-		$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
-		$aData['sLabel'] = $oTOTPService->sLabel;
-		$aData['sIssuer'] = $oTOTPService->sIssuer;
-		$aData['sSecret'] = $oUserSettings->Get('secret');
-
-		$sRet = MFATOTPService::GetInstance()->ValidateCode($oUserSettings);
+		$sRet = MFATOTPService::GetInstance()->ValidateCode($this->MFAUserSettings);
 		switch ($sRet) {
 			case MFATOTPService::NO_CODE:
-				if ($oUserSettings->Get('validated') === 'yes') {
+				if ($this->MFAUserSettings->Get('validated') === 'yes') {
 					$aData['sMessage'] = Dict::S('MFATOTP:Validated');
 				}
 				break;
@@ -83,11 +72,31 @@ class MFATotpAppPortalTabSectionExtension implements iPortalTabSectionExtension
 
 			case MFATOTPService::CODE_OK:
 				$aData['sMessage'] = Dict::S('MFATOTP:Validated');
-				$oUserSettings->Set('validated', 'yes');
-				$oUserSettings->AllowWrite();
-				$oUserSettings->DBUpdate();
+				$this->MFAUserSettings->Set('validated', 'yes');
+				$this->MFAUserSettings->AllowWrite();
+				$this->MFAUserSettings->DBUpdate();
 				break;
 		}
+	}
+
+	/**
+	 * List twigs and variables for the tab content per block
+	 *
+	 * @return PortalTwigContext
+	 */
+	public function GetPortalTabContentTwigs(): PortalTwigContext
+	{
+		$oPortalTwigContext = new PortalTwigContext();
+
+		$oTOTPService = new OTPService($this->MFAUserSettings);
+
+		$aData = [];
+		$aData['sAction'] = MFAPortalService::GetInstance()->GetSelectedAction();
+		$aData['sClass'] = MFAUserSettingsTOTPApp::class;
+		$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
+		$aData['sLabel'] = $oTOTPService->sLabel;
+		$aData['sIssuer'] = $oTOTPService->sIssuer;
+		$aData['sSecret'] = $this->MFAUserSettings->Get('secret');
 
 		$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpAppView.html.twig';
 		$oPortalTwigContext->AddBlockExtension('html', new PortalBlockExtension($sPath, $aData));
