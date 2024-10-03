@@ -41,6 +41,7 @@ function SaveMFASettingsAction()
 			data: {
 				"exec_module": "{{ aData.sModuleId }}",
 				"exec_page": "index.php",
+				"transaction_id": "{{ aData.sTransactionId }}",
 				"operation": "UpdateMailSettings",
 				"email": email
 			},
@@ -79,6 +80,7 @@ function ResendEmail()
 		data: {
 			"exec_module": "{{ aData.sModuleId }}",
 			"exec_page": "index.php",
+			"transaction_id": "{{ aData.sTransactionId }}",
 			"operation": "ResendEmail"
 		},
 		success: function(data) {

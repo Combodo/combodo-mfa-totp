@@ -49,6 +49,7 @@
 			{% set sFormId = "form_mfa_configure" ~ aData.sAction ~ "_" ~ aData.sClass %}
 			<form id="{{ sFormId }}" class="" style="display:inline-block;" method="POST">
 				<input type="hidden" name="action" value="configure">
+				<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
 				<input type="hidden" name="class" value="{{ aData.sClass }}">
 				<input type="text" id="totp_code" name="totp_code" class="form-control" value="" size="6"
 				       oninput="CheckLoginCode(); return false;" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">

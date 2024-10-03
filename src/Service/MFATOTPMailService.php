@@ -155,6 +155,7 @@ class MFATOTPMailService
 			$aData['sTitle'] = Dict::S('MFATOTP:Mail:Validation:Title');
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
+			$aData['sTransactionId'] = utils::GetNewTransactionId();
 
 			$oLoginContext = $this->ValidateCode($oMFAUserSettings, $aData);
 			if (!is_null($oLoginContext)) {

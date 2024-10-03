@@ -33,6 +33,7 @@ function SaveMFASettingsAction()
 			data: {
 				"exec_module": "{{ sModuleId }}",
 				"exec_page": "index.php",
+				"transaction_id": "{{ sTransactionId }}",
 				"operation": "UpdateMailSettings",
 				"email": email
 			},
@@ -70,6 +71,7 @@ function ResendEmail()
 		url: "{{ sAjaxURL|raw }}",
 		data: {
 			"exec_module": "{{ sModuleId }}",
+			"transaction_id": "{{ sTransactionId }}",
 			"exec_page": "index.php",
 			"operation": "ResendEmail"
 		},

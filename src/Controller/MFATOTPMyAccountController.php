@@ -37,6 +37,7 @@ class MFATOTPMyAccountController extends Controller
 
 		$aParams['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
 		$aParams['sLabel'] = $oTOTPService->sLabel;
+		$aParams['sTransactionId'] = utils::GetNewTransactionId();
 		$aParams['sIssuer'] = $oTOTPService->sIssuer;
 		$aParams['sSecret'] = $oMFAUserSettings->Get('secret');
 
@@ -103,6 +104,7 @@ class MFATOTPMyAccountController extends Controller
 		}
 
 		$aParams['sModuleId'] = MFATOTPHelper::MODULE_NAME;
+		$aParams['sTransactionId'] = utils::GetNewTransactionId();
 		$aParams['sAjaxURL'] = utils::GetAbsoluteUrlExecPage();
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());
@@ -118,6 +120,12 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
+			$sTransactionId = utils::ReadPostedParam('transaction_id', null, utils::ENUM_SANITIZATION_FILTER_TRANSACTION_ID);
+
+			if (empty($sTransactionId) || !utils::IsTransactionValid($sTransactionId, false)) {
+				throw new MFABaseException(Dict::S('iTopUpdate:Error:InvalidToken'));
+			}
+
 			$sEmail = utils::ReadPostedParam('email', '', utils::ENUM_SANITIZATION_FILTER_STRING);
 			$sUserId = UserRights::GetUserId();
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
@@ -141,6 +149,11 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
+			$sTransactionId = utils::ReadPostedParam('transaction_id', null, utils::ENUM_SANITIZATION_FILTER_TRANSACTION_ID);
+			if (empty($sTransactionId) || !utils::IsTransactionValid($sTransactionId, false)) {
+				throw new MFABaseException(Dict::S('iTopUpdate:Error:InvalidToken'));
+			}
+
 			$sUserId = UserRights::GetUserId();
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
 			MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);
