@@ -48,7 +48,8 @@ class ComposerStaticInit090791b9d4e4bb914e67e4939a7273ec
     public static $classMap = array (
         'Combodo\\iTop\\MFATotp\\Controller\\MFATOTPMyAccountController' => __DIR__ . '/../..' . '/src/Controller/MFATOTPMyAccountController.php',
         'Combodo\\iTop\\MFATotp\\Helper\\MFATOTPHelper' => __DIR__ . '/../..' . '/src/Helper/MFATOTPHelper.php',
-        'Combodo\\iTop\\MFATotp\\Hook\\MFATotpAppPortalTabSectionExtension' => __DIR__ . '/../..' . '/src/Hook/MFATotpAppPortalTabSectionExtension.php',
+        'Combodo\\iTop\\MFATotp\\Hook\\MFATotpAppPortalTabContentExtension' => __DIR__ . '/../..' . '/src/Hook/MFATotpAppPortalTabContentExtension.php',
+        'Combodo\\iTop\\MFATotp\\Hook\\MFATotpMailPortalTabContentExtension' => __DIR__ . '/../..' . '/src/Hook/MFATotpMailPortalTabContentExtension.php',
         'Combodo\\iTop\\MFATotp\\QRCode\\QRCode' => __DIR__ . '/../..' . '/src/QRCode/QRCode.php',
         'Combodo\\iTop\\MFATotp\\Service\\MFATOTPAppService' => __DIR__ . '/../..' . '/src/Service/MFATOTPAppService.php',
         'Combodo\\iTop\\MFATotp\\Service\\MFATOTPMailService' => __DIR__ . '/../..' . '/src/Service/MFATOTPMailService.php',

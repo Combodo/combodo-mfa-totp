@@ -16,9 +16,9 @@ use MFAUserSettingsTOTPApp;
 use UserRights;
 use utils;
 
-class MFATotpAppPortalTabSectionExtension implements iPortalTabContentExtension
+class MFATotpAppPortalTabContentExtension implements iPortalTabContentExtension
 {
-	private $MFAUserSettings;
+	private $oMFAUserSettings;
 
 	/**
 	 * @inheritDoc
@@ -56,12 +56,12 @@ class MFATotpAppPortalTabSectionExtension implements iPortalTabContentExtension
 	{
 		$sUserId = UserRights::GetUserId();
 		/** @var MFAUserSettingsTOTPApp $oUserSettings */
-		$this->MFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::Class);
+		$this->oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::Class);
 
-		$sRet = MFATOTPService::GetInstance()->ValidateCode($this->MFAUserSettings);
+		$sRet = MFATOTPService::GetInstance()->ValidateCode($this->oMFAUserSettings);
 		switch ($sRet) {
 			case MFATOTPService::NO_CODE:
-				if ($this->MFAUserSettings->Get('validated') === 'yes') {
+				if ($this->oMFAUserSettings->Get('validated') === 'yes') {
 					$aData['sMessage'] = Dict::S('MFATOTP:Validated');
 				}
 				break;
@@ -72,9 +72,9 @@ class MFATotpAppPortalTabSectionExtension implements iPortalTabContentExtension
 
 			case MFATOTPService::CODE_OK:
 				$aData['sMessage'] = Dict::S('MFATOTP:Validated');
-				$this->MFAUserSettings->Set('validated', 'yes');
-				$this->MFAUserSettings->AllowWrite();
-				$this->MFAUserSettings->DBUpdate();
+				$this->oMFAUserSettings->Set('validated', 'yes');
+				$this->oMFAUserSettings->AllowWrite();
+				$this->oMFAUserSettings->DBUpdate();
 				break;
 		}
 	}
@@ -88,7 +88,7 @@ class MFATotpAppPortalTabSectionExtension implements iPortalTabContentExtension
 	{
 		$oPortalTwigContext = new PortalTwigContext();
 
-		$oTOTPService = new OTPService($this->MFAUserSettings);
+		$oTOTPService = new OTPService($this->oMFAUserSettings);
 
 		$aData = [];
 		$aData['sAction'] = MFAPortalService::GetInstance()->GetSelectedAction();
@@ -96,7 +96,7 @@ class MFATotpAppPortalTabSectionExtension implements iPortalTabContentExtension
 		$aData['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
 		$aData['sLabel'] = $oTOTPService->sLabel;
 		$aData['sIssuer'] = $oTOTPService->sIssuer;
-		$aData['sSecret'] = $this->MFAUserSettings->Get('secret');
+		$aData['sSecret'] = $this->oMFAUserSettings->Get('secret');
 
 		$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpAppView.html.twig';
 		$oPortalTwigContext->AddBlockExtension('html', new PortalBlockExtension($sPath, $aData));

@@ -1,10 +1,13 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
+
+
+
 <div class="col-sm-6">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">{{ 'MFATOTP:App:Config:Title'|dict_s }}</h3>
+			<h3 class="panel-title">{{ 'MFATOTP:Mail:Config:Title'|dict_s }}</h3>
 		</div>
 		<div class="panel-body">
 			<div class="form_alerts">
@@ -17,36 +20,29 @@
 			</div>
 
 			<div class="form_field_label">
-				<label class="control-label">{{ 'MFATOTP:Issuer'|dict_s }}</label>
+				<label class="control-label">{{ 'MFATOTP:Mail:Settings:email:label'|dict_s }}</label>
 			</div>
-			<div class="form_field_control"><div class="form-control-static">{{ aData.sIssuer }}</div></div>
+			<div class="form_field_control">
+				<input type="text" id="email_attribute" name="email_attribute" value="{{ aData.oMFAUserSettings.Get("email") }}"
+				       class="form-control" oninput="SaveMFASettings();">
 
-			<div class="form_field_label">
-				<label class="control-label">{{ 'MFATOTP:App:Label'|dict_s }}</label>
+				<div class="form_btn_regular">
+					<input onclick="ResendEmail();" class="btn btn-primary form_btn_submit" type="submit"
+					       value="{{ 'MFATOTP:Mail:ResendEmail:Button'|dict_s }}" data-tooltip-content="{{ 'MFATOTP:Mail:ResendEmail:Button+'|dict_s }}">
+				</div>
 			</div>
-			<div class="form_field_control"><div class="form-control-static">{{ aData.sLabel }}</div></div>
-
-
-			<div class="form_field_label">
-				<label class="control-label">{{ 'MFATOTP:App:ScanQRCode'|dict_s }}</label>
-			</div>
-			<div class="form_field_control"><div class="form-control-static">{{ aData.sQRCodeSVG|raw }}</div></div>
-
-			<div class="form_field_label">
-				<label class="control-label">{{ 'MFATOTP:App:Secret'|dict_s }}</label>
-			</div>
-			<div class="form_field_control"><div class="form-control-static">{{ aData.sSecret }}</div></div>
 		</div>
 	</div>
 </div>
+
 <div class="col-sm-6">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">{{ 'MFATOTP:App:CodeValidation:Title'|dict_format(aData.sIssuer, aData.sLabel) }}</h3>
+			<h3 class="panel-title">{{ 'MFATOTP:Mail:Validation'|dict_s }}</h3>
 		</div>
 		<div class="panel-body">
 			<div class="form_field_label">
-				<label class="control-label">{{ 'MFATOTP:App:CodeValidation:explain'|dict_s }}</label>
+				<label class="control-label">{{ 'MFATOTP:Mail:CodeValidation:explain'|dict_s }}</label>
 			</div>
 			{% set sFormId = "form_mfa_configure" ~ aData.sAction ~ "_" ~ aData.sClass %}
 			<form id="{{ sFormId }}" class="" style="display:inline-block;" method="POST">
@@ -58,4 +54,3 @@
 		</div>
 	</div>
 </div>
-
