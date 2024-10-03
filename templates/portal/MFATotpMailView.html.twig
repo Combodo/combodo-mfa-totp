@@ -25,11 +25,6 @@
 			<div class="form_field_control">
 				<input type="text" id="email_attribute" name="email_attribute" value="{{ aData.oMFAUserSettings.Get("email") }}"
 				       class="form-control" oninput="SaveMFASettings();">
-
-				<div class="form_btn_regular">
-					<input onclick="ResendEmail();" class="btn btn-primary form_btn_submit" type="submit"
-					       value="{{ 'MFATOTP:Mail:ResendEmail:Button'|dict_s }}" data-tooltip-content="{{ 'MFATOTP:Mail:ResendEmail:Button+'|dict_s }}">
-				</div>
 			</div>
 		</div>
 	</div>
@@ -41,6 +36,13 @@
 			<h3 class="panel-title">{{ 'MFATOTP:Mail:Validation'|dict_s }}</h3>
 		</div>
 		<div class="panel-body">
+			<div class="form-group form_group_small">
+				<div class="form_btn_regular">
+					<input onclick="ResendEmail();" class="btn btn-primary form_btn_submit" type="submit"
+					       value="{{ 'MFATOTP:Mail:ResendEmail:Button'|dict_s }}" data-tooltip-content="{{ 'MFATOTP:Mail:ResendEmail:Button+'|dict_s }}">
+				</div>
+			</div>
+
 			<div class="form_field_label">
 				<label class="control-label">{{ 'MFATOTP:Mail:CodeValidation:explain'|dict_s }}</label>
 			</div>
