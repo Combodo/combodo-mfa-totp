@@ -26,6 +26,7 @@
 		<div class="ibo-v-spacer"></div>
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
+				<input type="hidden" name="transaction_id" value="{{ sTransactionId }}">
 				<input type="text" id="totp_code" name="totp_code" value="" size="6"
 				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
 				       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">

@@ -28,37 +28,44 @@ class MFATOTPMyAccountController extends Controller
 	public function OperationMFATOTPAppConfig()
 	{
 		$aParams = [];
-		$sUserId = UserRights::GetUserId();
-		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
-		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::class);
-		$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 
-		$oTOTPService = new OTPService($oMFAUserSettings);
+		try {
+			$this->ValidateTransactionId();
 
-		$aParams['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
-		$aParams['sLabel'] = $oTOTPService->sLabel;
-		$aParams['sTransactionId'] = utils::GetNewTransactionId();
-		$aParams['sIssuer'] = $oTOTPService->sIssuer;
-		$aParams['sSecret'] = $oMFAUserSettings->Get('secret');
+			$sUserId = UserRights::GetUserId();
+			/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
+			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::class);
+			$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 
-		$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
-		switch ($sRet) {
-			case MFATOTPService::NO_CODE:
-				if ($oMFAUserSettings->Get('validated') === 'yes') {
+			$oTOTPService = new OTPService($oMFAUserSettings);
+
+			$aParams['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
+			$aParams['sLabel'] = $oTOTPService->sLabel;
+			$aParams['sTransactionId'] = utils::GetNewTransactionId();
+			$aParams['sIssuer'] = $oTOTPService->sIssuer;
+			$aParams['sSecret'] = $oMFAUserSettings->Get('secret');
+
+			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
+			switch ($sRet) {
+				case MFATOTPService::NO_CODE:
+					if ($oMFAUserSettings->Get('validated') === 'yes') {
+						$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+					}
+					break;
+
+				case MFATOTPService::WRONG_CODE:
+					$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
+					break;
+
+				case MFATOTPService::CODE_OK:
 					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
-				}
-				break;
-
-			case MFATOTPService::WRONG_CODE:
-				$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
-				break;
-
-			case MFATOTPService::CODE_OK:
-				$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
-				$oMFAUserSettings->Set('validated', 'yes');
-				$oMFAUserSettings->AllowWrite();
-				$oMFAUserSettings->DBUpdate();
-				break;
+					$oMFAUserSettings->Set('validated', 'yes');
+					$oMFAUserSettings->AllowWrite();
+					$oMFAUserSettings->DBUpdate();
+					break;
+			}
+		} catch (MFABaseException $e) {
+			$aParams['sError'] = Dict::S('MFATOTP:Error:ConfigurationFailed');
 		}
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());
@@ -71,11 +78,14 @@ class MFATOTPMyAccountController extends Controller
 	public function OperationMFATOTPMailConfig()
 	{
 		$aParams = [];
-		$sUserId = UserRights::GetUserId();
-		/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
-		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
-		$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 		try {
+			$this->ValidateTransactionId();
+
+			$sUserId = UserRights::GetUserId();
+			/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
+			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
+			$aParams['oMFAUserSettings'] = $oMFAUserSettings;
+
 			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
 			switch ($sRet) {
 				case MFATOTPService::NO_CODE:
@@ -120,11 +130,7 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
-			$sTransactionId = utils::ReadPostedParam('transaction_id', null, utils::ENUM_SANITIZATION_FILTER_TRANSACTION_ID);
-
-			if (empty($sTransactionId) || !utils::IsTransactionValid($sTransactionId, false)) {
-				throw new MFABaseException(Dict::S('iTopUpdate:Error:InvalidToken'));
-			}
+			$this->ValidateTransactionId();
 
 			$sEmail = utils::ReadPostedParam('email', '', utils::ENUM_SANITIZATION_FILTER_STRING);
 			$sUserId = UserRights::GetUserId();
@@ -149,10 +155,7 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
-			$sTransactionId = utils::ReadPostedParam('transaction_id', null, utils::ENUM_SANITIZATION_FILTER_TRANSACTION_ID);
-			if (empty($sTransactionId) || !utils::IsTransactionValid($sTransactionId, false)) {
-				throw new MFABaseException(Dict::S('iTopUpdate:Error:InvalidToken'));
-			}
+			$this->ValidateTransactionId();
 
 			$sUserId = UserRights::GetUserId();
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
@@ -165,5 +168,20 @@ class MFATOTPMyAccountController extends Controller
 		}
 
 		$this->DisplayJSONPage($aParams);
+	}
+
+	/**
+	 * @return void
+	 * @throws \Combodo\iTop\MFABase\Helper\MFABaseException
+	 */
+	public function ValidateTransactionId(): void {
+		if (empty($_POST)){
+			return;
+		}
+		
+		$sTransactionId = utils::ReadPostedParam('transaction_id', null, utils::ENUM_SANITIZATION_FILTER_TRANSACTION_ID);
+		if (empty($sTransactionId) || !utils::IsTransactionValid($sTransactionId, false)) {
+			throw new MFABaseException(Dict::S('iTopUpdate:Error:InvalidToken'));
+		}
 	}
 }
