@@ -24,13 +24,18 @@ use utils;
 
 class MFATOTPMyAccountController extends Controller
 {
+	public function __construct($sViewPath = '', $sModuleName = 'core', $aAdditionalPaths = [])
+	{
+		parent::__construct($sViewPath, $sModuleName, $aAdditionalPaths);
+
+		MFABaseLog::Enable();
+	}
+
 	public function OperationMFATOTPAppConfig()
 	{
 		$aParams = [];
 
 		try {
-			MFABaseHelper::GetInstance()->ValidateTransactionId();
-
 			$sUserId = UserRights::GetUserId();
 			/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::class);
@@ -78,8 +83,6 @@ class MFATOTPMyAccountController extends Controller
 	{
 		$aParams = [];
 		try {
-			MFABaseHelper::GetInstance()->ValidateTransactionId();
-
 			$sUserId = UserRights::GetUserId();
 			/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);

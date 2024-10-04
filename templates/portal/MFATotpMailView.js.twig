@@ -39,9 +39,9 @@ function SaveMFASettingsAction()
 			method: "POST",
 			url: "{{ aData.sAjaxURL|raw }}",
 			data: {
-				"exec_module": "{{ aData.sModuleId }}",
+				"exec_module": "{{ aData.sModuleId|raw }}",
 				"exec_page": "index.php",
-				"transaction_id": "{{ aData.sTransactionId }}",
+				"transaction_id": "{{ aData.sTransactionId|raw }}",
 				"operation": "UpdateMailSettings",
 				"email": email
 			},
@@ -78,9 +78,9 @@ function ResendEmail()
 		method: "POST",
 		url: "{{ aData.sAjaxURL|raw }}",
 		data: {
-			"exec_module": "{{ aData.sModuleId }}",
+			"exec_module": "{{ aData.sModuleId|raw }}",
 			"exec_page": "index.php",
-			"transaction_id": "{{ aData.sTransactionId }}",
+			"transaction_id": "{{ aData.sTransactionId|raw  }}",
 			"operation": "ResendEmail"
 		},
 		success: function(data) {
