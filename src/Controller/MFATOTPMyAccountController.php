@@ -17,7 +17,6 @@ use Combodo\iTop\MFATotp\Service\MFATOTPService;
 use Combodo\iTop\MFATotp\Service\OTPService;
 use CoreCannotSaveObjectException;
 use Dict;
-use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
 use MFAUserSettingsTOTPMail;
 use UserRights;
@@ -30,7 +29,7 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
-			$this->ValidateTransactionId();
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
 
 			$sUserId = UserRights::GetUserId();
 			/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
@@ -79,7 +78,7 @@ class MFATOTPMyAccountController extends Controller
 	{
 		$aParams = [];
 		try {
-			$this->ValidateTransactionId();
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
 
 			$sUserId = UserRights::GetUserId();
 			/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
@@ -130,7 +129,7 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
-			$this->ValidateTransactionId();
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
 
 			$sEmail = utils::ReadPostedParam('email', '', utils::ENUM_SANITIZATION_FILTER_STRING);
 			$sUserId = UserRights::GetUserId();
@@ -155,7 +154,7 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
-			$this->ValidateTransactionId();
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
 
 			$sUserId = UserRights::GetUserId();
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
@@ -168,20 +167,5 @@ class MFATOTPMyAccountController extends Controller
 		}
 
 		$this->DisplayJSONPage($aParams);
-	}
-
-	/**
-	 * @return void
-	 * @throws \Combodo\iTop\MFABase\Helper\MFABaseException
-	 */
-	public function ValidateTransactionId(): void {
-		if (empty($_POST)){
-			return;
-		}
-		
-		$sTransactionId = utils::ReadPostedParam('transaction_id', null, utils::ENUM_SANITIZATION_FILTER_TRANSACTION_ID);
-		if (empty($sTransactionId) || !utils::IsTransactionValid($sTransactionId, false)) {
-			throw new MFABaseException(Dict::S('iTopUpdate:Error:InvalidToken'));
-		}
 	}
 }

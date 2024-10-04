@@ -79,6 +79,7 @@ class MFATOTPAppService
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sSecret'] = $oTOTPService->GetSecret();
+			$aData['sTransactionId'] = utils::GetNewTransactionId();
 		} catch (MFABaseException $e) {
 			$aData['sError'] = 'MFA Configuration failed';
 		} catch (Exception $e) {
@@ -115,6 +116,7 @@ class MFATOTPAppService
 			$aData['sTitle'] = Dict::S('MFATOTP:App:Validation:Title');
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
+			$aData['sTransactionId'] = utils::GetNewTransactionId();
 		} catch (MFABaseException $e) {
 			$aData['sError'] = 'MFA Configuration failed';
 		} catch (Exception $e) {
