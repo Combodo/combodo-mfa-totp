@@ -1,9 +1,6 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
-
-
-
 <div class="col-sm-6">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -24,7 +21,7 @@
 			</div>
 			<div class="form_field_control">
 				<input type="text" id="email_attribute" name="email_attribute" value="{{ aData.oMFAUserSettings.Get("email") }}"
-				       class="form-control" oninput="SaveMFASettings();">
+				       class="form-control" oninput="SaveMFASettings(); return false;">
 			</div>
 		</div>
 	</div>
@@ -38,7 +35,7 @@
 		<div class="panel-body">
 			<div class="form-group form_group_small">
 				<div class="form_btn_regular">
-					<input onclick="ResendEmail();" class="btn btn-primary form_btn_submit" type="submit"
+					<input onclick="ResendEmail(); return false;" class="btn btn-primary form_btn_submit" type="submit"
 					       value="{{ 'MFATOTP:Mail:ResendEmail:Button'|dict_s }}" data-tooltip-content="{{ 'MFATOTP:Mail:ResendEmail:Button+'|dict_s }}">
 				</div>
 			</div>

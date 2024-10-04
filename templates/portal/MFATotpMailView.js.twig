@@ -13,14 +13,10 @@ function CheckLoginCode() {
 
 function SaveMFASettings() {
 	let successMessage = $('#success-message');
-	if (!successMessage.hasClass('ibo-is-hidden')) {
-		successMessage.addClass('ibo-is-hidden');
-	}
+	successMessage.hide();
 
 	let errorMessage = $("#error-message");
-	if (!errorMessage.hasClass('ibo-is-hidden')) {
-		errorMessage.addClass('ibo-is-hidden');
-	}
+	errorMessage.hide();
 
 	if (typeof saveMFASettingsTimeout === "number") {
 		clearTimeout(saveMFASettingsTimeout);
@@ -49,12 +45,12 @@ function SaveMFASettingsAction()
 				if (data.code === 0) {
 					if (data.message) {
 						$('#success-message-content').html(data.message);
-						successMessage.removeClass('ibo-is-hidden')
+						successMessage.show();
 					}
 				} else {
 					if (data.error) {
 						$('#error-message-content').html(data.error);
-						errorMessage.removeClass('ibo-is-hidden')
+						errorMessage.show();
 					}
 				}
 			}
@@ -65,14 +61,10 @@ function SaveMFASettingsAction()
 function ResendEmail()
 {
 	let successMessage = $('#success-message');
-	if (!successMessage.hasClass('ibo-is-hidden')) {
-		successMessage.addClass('ibo-is-hidden');
-	}
+	successMessage.hide();
 
 	let errorMessage = $("#error-message");
-	if (!errorMessage.hasClass('ibo-is-hidden')) {
-		errorMessage.addClass('ibo-is-hidden');
-	}
+	errorMessage.hide();
 
 	$.ajax({
 		method: "POST",
@@ -87,12 +79,12 @@ function ResendEmail()
 			if (data.code === 0) {
 				if (data.message) {
 					$('#success-message-content').html(data.message);
-					successMessage.removeClass('ibo-is-hidden')
+					successMessage.show();
 				}
 			} else {
 				if (data.error) {
 					$('#error-message-content').html(data.error);
-					errorMessage.removeClass('ibo-is-hidden')
+					errorMessage.show();
 				}
 			}
 		}
