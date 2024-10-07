@@ -81,9 +81,9 @@ class MFATOTPAppService
 			$aData['sSecret'] = $oTOTPService->GetSecret();
 			$aData['sTransactionId'] = utils::GetNewTransactionId();
 		} catch (MFABaseException $e) {
-			$aData['sError'] = 'MFA Configuration failed';
+			$aData['sError'] = Dict::S('MFATOTP:App:Configuration:Error');
 		} catch (Exception $e) {
-			$aData['sError'] = 'MFA Configuration failed';
+			$aData['sError'] = Dict::S('MFATOTP:App:Configuration:Error');
 			MFABaseLog::Error(__FUNCTION__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
 		}
 
@@ -118,9 +118,9 @@ class MFATOTPAppService
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sTransactionId'] = utils::GetNewTransactionId();
 		} catch (MFABaseException $e) {
-			$aData['sError'] = 'MFA Configuration failed';
+			$aData['sError'] = Dict::S('MFATOTP:App:Validation:Error');
 		} catch (Exception $e) {
-			$aData['sError'] = 'MFA Configuration failed';
+			$aData['sError'] = Dict::S('MFATOTP:App:Validation:Error');
 			MFABaseLog::Info(__FUNCTION__.' MFA Configuration failed', null, ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
 		}
 
