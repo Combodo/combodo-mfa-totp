@@ -99,9 +99,9 @@ if (interface_exists('Combodo\iTop\Portal\Hook\iPortalTabContentExtension')) {
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sSecret'] = $this->oMFAUserSettings->Get('secret');
 
-			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpAppView.html.twig';
+			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpAppPortalConfig.html.twig';
 			$oPortalTwigContext->AddBlockExtension('html', new PortalBlockExtension($sPath, $aData));
-			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpAppView.js.twig';
+			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpAppPortalConfig.js.twig';
 			$oPortalTwigContext->AddBlockExtension('script', new PortalBlockExtension($sPath, $aData));
 
 			return $oPortalTwigContext;

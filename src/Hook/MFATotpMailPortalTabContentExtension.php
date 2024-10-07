@@ -126,9 +126,9 @@ if (interface_exists('Combodo\iTop\Portal\Hook\iPortalTabContentExtension')) {
 			$aData['sAction'] = MFAPortalService::GetInstance()->GetSelectedAction();
 			$aData['sClass'] = MFAUserSettingsTOTPMail::class;
 
-			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpMailView.html.twig';
+			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpMailPortalConfig.html.twig';
 			$oPortalTwigContext->AddBlockExtension('html', new PortalBlockExtension($sPath, $aData));
-			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpMailView.js.twig';
+			$sPath = MFATOTPHelper::MODULE_NAME.'/templates/portal/MFATotpMailPortalConfig.js.twig';
 			$oPortalTwigContext->AddBlockExtension('script', new PortalBlockExtension($sPath, $aData));
 
 			return $oPortalTwigContext;

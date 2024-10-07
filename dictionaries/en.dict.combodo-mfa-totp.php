@@ -11,6 +11,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFA:login:switch:label:MFAUserSettingsTOTPMail' => 'Send verification code by email',
 	'combodo-mfa-totp/Operation:MFATOTPMailConfig/Title' => 'Configure MFA by email',
 	'combodo-mfa-totp/Operation:MFATOTPAppConfig/Title' => 'Configure authenticator app',
+	'MFA:MFAUserSettingsTOTPApp:Description' => 'Use an authentication app or browser extension to get two-factor authentication codes when prompted.',
+	'MFA:MFAUserSettingsTOTPMail:Description' => 'Get one-time codes sent to you via email to complete authentication requests.',
 
 	'MFATOTP:Redirection:Title' => 'Redirecting to home page...',
 	'MFATOTP:Validated' => 'Authenticator app Validated',

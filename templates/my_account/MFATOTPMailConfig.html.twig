@@ -8,6 +8,11 @@
 {% block configuration %}
 
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Settings:Title'|dict_s } %}
+		{% UIContentBlock Standard {} %}
+			{{ 'MFA:MFAUserSettingsTOTPMail:Description'|dict_s }}
+			<div class="ibo-v-spacer"></div>
+		{% EndUIContentBlock %}
+
 		{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
 			<input type="text" id="email_attribute" name="email_attribute" value="{{ oMFAUserSettings.Get("email") }}"
 			       class="ibo-input ibo-block ibo-input-string" oninput="SaveMFASettings();"
