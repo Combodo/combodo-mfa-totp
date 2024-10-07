@@ -1,0 +1,78 @@
+{# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
+{# @license     http://opensource.org/licenses/AGPL-3.0 #}
+
+<div class="col-sm-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{{ 'MFATOTP:Mail:Config:Title'|dict_s }}</h3>
+		</div>
+		<div class="panel-body">
+			<div class="form_alerts">
+				{% if aData.sMessage is defined %}
+					<div class="alert alert-success" role="alert">{{ aData.sMessage }}</div>
+				{% endif %}
+				{% if aData.sError is defined %}
+					<div class="alert alert-error alert-danger" role="alert">{{ aData.sError }}</div>
+				{% endif %}
+			</div>
+
+			<div class="form_field_label">
+				<label class="control-label">{{ 'MFATOTP:Mail:Settings:email:label'|dict_s }}</label>
+			</div>
+
+			<div class="form-group form_group_small">
+				<form id="form_mfa_configure_change_mail_settings" class="" style="display:inline-block;" method="POST">
+					<input type="hidden" name="action" value="configure">
+					<input type="hidden" name="operation" value="save_email">
+					<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
+					<input type="hidden" name="class" value="{{ aData.sClass }}">
+					<div class="form_field_control">
+						<input type="text" id="email_attribute" name="email_attribute" value="{{ aData.oMFAUserSettings.Get("email") }}"
+						       class="form-control">
+					</div>
+					<div class="form_field_label">&nbsp;</div>
+					<div class="form_field_control">
+						<div class="form_btn_regular">
+							<input class="btn btn-primary form_btn_submit" type="submit"
+							       value="{{ 'Portal:Button:Submit'|dict_s }}">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-sm-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{{ 'MFATOTP:Mail:Validation'|dict_s }}</h3>
+		</div>
+		<div class="panel-body">
+			<div class="form-group form_group_small">
+				<form id="form_mfa_configure_resend_email" class="" style="display:inline-block;" method="POST">
+					<input type="hidden" name="action" value="configure">
+					<input type="hidden" name="operation" value="resend_email">
+					<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
+					<input type="hidden" name="class" value="{{ aData.sClass }}">
+					<div class="form_btn_regular">
+						<input class="btn btn-primary form_btn_submit" type="submit"
+						       value="{{ 'MFATOTP:Mail:ResendEmail:Button'|dict_s }}" data-tooltip-content="{{ 'MFATOTP:Mail:ResendEmail:Button+'|dict_s }}">
+					</div>
+				</form>
+			</div>
+
+			<div class="form_field_label">
+				<label class="control-label">{{ 'MFATOTP:Mail:CodeValidation:explain'|dict_s }}</label>
+			</div>
+			{% set sFormId = "form_mfa_configure" ~ aData.sAction ~ "_" ~ aData.sClass %}
+			<form id="{{ sFormId }}" class="" style="display:inline-block;" method="POST">
+				<input type="hidden" name="action" value="configure">
+				<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
+				<input type="hidden" name="class" value="{{ aData.sClass }}">
+				<input type="text" id="totp_code" name="totp_code" class="form-control" value="" size="6"
+				       oninput="CheckLoginCode(); return false;" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">
+			</form>
+		</div>
+	</div>
+</div>

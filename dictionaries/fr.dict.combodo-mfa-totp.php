@@ -42,7 +42,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:Validation:Title' => 'Multi-Factor Authentication',
 	'MFATOTP:Mail:Settings:Title' => 'Email settings',
 	'MFATOTP:Mail:Settings:email:label' => 'User email',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email has been saved successfully with email %1$s',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. Please re-enter the code received by email to validate this modification',
 	'MFATOTP:Mail:Validation' => 'Validation',
 	'MFATOTP:Mail:CodeValidation:explain' => 'Enter code received by email',
 
@@ -50,6 +50,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:EmailBody' => '<body><p>The code to connect to %1$s as %2$s is</p><strong>%4$s</strong><p></p><p>This code is valid until %3$s</p><p>If you are not trying to connect to %1$s, please contact your administrator.</p>',
 
 	'MFATOTP:Error:SendMailFailed' => 'Error: Sending MFA email for code has failed.',
+	'MFATOTP:Error:ConfigurationFailed' => 'Error: Configuring MFA application has failed.',
 	'MFATOTP:Error:SaveSettingsFailed' => 'Error: Saving MFA email has failed. (probably a wrong email format)',
 
 	'Class:MFAUserSettingsTOTPApp' => 'MFA TOTP by application',

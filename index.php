@@ -14,7 +14,7 @@ use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 require_once(APPROOT.'application/startup.inc.php');
 
 $sTemplates = MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/my_account';
-$aAdditionalPaths = [MODULESROOT.MFABaseHelper::MODULE_NAME.'/templates/config'];
+$aAdditionalPaths = [MODULESROOT.MFABaseHelper::MODULE_NAME.'/templates/my_account'];
 
 $oUpdateController = new MFATOTPMyAccountController($sTemplates, MFATOTPHelper::MODULE_NAME, $aAdditionalPaths);
 $oUpdateController->SetDefaultOperation('MFATOTPAppConfig');

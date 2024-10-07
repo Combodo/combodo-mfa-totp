@@ -7,11 +7,10 @@
  */
 
 Dict::Add('EN US', 'English', 'English', array(
-	'combodo-mfa-totp/Operation:MFATOTPMailConfig/Title' => 'Configure MFA by email',
-	'combodo-mfa-totp/Operation:MFATOTPAppConfig/Title' => 'Configure authenticator app',
-
 	'MFA:login:switch:label:MFAUserSettingsTOTPApp' => 'Use authenticator app',
 	'MFA:login:switch:label:MFAUserSettingsTOTPMail' => 'Send verification code by email',
+	'combodo-mfa-totp/Operation:MFATOTPMailConfig/Title' => 'Configure MFA by email',
+	'combodo-mfa-totp/Operation:MFATOTPAppConfig/Title' => 'Configure authenticator app',
 
 	'MFATOTP:Redirection:Title' => 'Redirecting to home page...',
 	'MFATOTP:Validated' => 'Authenticator app Validated',
@@ -29,6 +28,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFATOTP:App:Secret:Copy' => 'Copy secret to clipboard',
 	'MFATOTP:App:Secret:Copy:Done' => 'Secret copied to clipboard',
 	'MFATOTP:App:Label' => 'Username',
+	'MFATOTP:App:Configuration:Error' => 'MFA Configuration failed',
+	'MFATOTP:App:Validation:Error' => 'MFA Validation failed',
 	'MFATOTP:App:CodeValidation:Title' => 'Enter validation code from your authenticator app for: %1$s - %2$s',
 	'MFATOTP:App:CodeValidation:explain' => 'Validate the configuration by typing the code received from the authenticator app',
 
@@ -43,7 +44,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFATOTP:Mail:Validation:Title' => 'Multi-Factor Authentication',
 	'MFATOTP:Mail:Settings:Title' => 'Email settings',
 	'MFATOTP:Mail:Settings:email:label' => 'User email',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email has been saved successfully with email %1$s',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. Please re-enter the code received by email to validate this modification',
 	'MFATOTP:Mail:Validation' => 'Validation',
 	'MFATOTP:Mail:CodeValidation:explain' => 'Enter code received by email',
 
@@ -51,6 +52,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFATOTP:Mail:EmailBody' => '<body><p>The code to connect to %1$s as %2$s is</p><strong>%4$s</strong><p></p><p>This code is valid until %3$s</p><p>If you are not trying to connect to %1$s, please contact your administrator.</p>',
 
 	'MFATOTP:Error:SendMailFailed' => 'Error: Sending MFA email for code has failed.',
+	'MFATOTP:Error:ConfigurationFailed' => 'Error: Configuring MFA application has failed.',
 	'MFATOTP:Error:SaveSettingsFailed' => 'Error: Saving MFA email has failed. (probably a wrong email format)',
 
 	'Class:MFAUserSettingsTOTPApp' => 'MFA TOTP by application',

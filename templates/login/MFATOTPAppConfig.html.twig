@@ -13,6 +13,7 @@
 </div>
 <form id="totp_form" method="post">
 	<div>
+		<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
 		<input type="text" id="totp_code" name="totp_code" value="" size="6"
 		       class="ibo-input ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
 		       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">

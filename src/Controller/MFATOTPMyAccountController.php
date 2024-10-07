@@ -17,7 +17,6 @@ use Combodo\iTop\MFATotp\Service\MFATOTPService;
 use Combodo\iTop\MFATotp\Service\OTPService;
 use CoreCannotSaveObjectException;
 use Dict;
-use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
 use MFAUserSettingsTOTPMail;
 use UserRights;
@@ -25,39 +24,52 @@ use utils;
 
 class MFATOTPMyAccountController extends Controller
 {
+	public function __construct($sViewPath = '', $sModuleName = 'core', $aAdditionalPaths = [])
+	{
+		parent::__construct($sViewPath, $sModuleName, $aAdditionalPaths);
+
+		MFABaseLog::Enable();
+	}
+
 	public function OperationMFATOTPAppConfig()
 	{
 		$aParams = [];
-		$sUserId = UserRights::GetUserId();
-		/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
-		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::class);
-		$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 
-		$oTOTPService = new OTPService($oMFAUserSettings);
+		try {
+			$sUserId = UserRights::GetUserId();
+			/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
+			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPApp::class);
+			$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 
-		$aParams['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
-		$aParams['sLabel'] = $oTOTPService->sLabel;
-		$aParams['sIssuer'] = $oTOTPService->sIssuer;
-		$aParams['sSecret'] = $oMFAUserSettings->Get('secret');
+			$oTOTPService = new OTPService($oMFAUserSettings);
 
-		$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
-		switch ($sRet) {
-			case MFATOTPService::NO_CODE:
-				if ($oMFAUserSettings->Get('validated') === 'yes') {
+			$aParams['sQRCodeSVG'] = $oTOTPService->GetQRCodeSVG();
+			$aParams['sLabel'] = $oTOTPService->sLabel;
+			$aParams['sTransactionId'] = utils::GetNewTransactionId();
+			$aParams['sIssuer'] = $oTOTPService->sIssuer;
+			$aParams['sSecret'] = $oMFAUserSettings->Get('secret');
+
+			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
+			switch ($sRet) {
+				case MFATOTPService::NO_CODE:
+					if ($oMFAUserSettings->Get('validated') === 'yes') {
+						$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+					}
+					break;
+
+				case MFATOTPService::WRONG_CODE:
+					$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
+					break;
+
+				case MFATOTPService::CODE_OK:
 					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
-				}
-				break;
-
-			case MFATOTPService::WRONG_CODE:
-				$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
-				break;
-
-			case MFATOTPService::CODE_OK:
-				$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
-				$oMFAUserSettings->Set('validated', 'yes');
-				$oMFAUserSettings->AllowWrite();
-				$oMFAUserSettings->DBUpdate();
-				break;
+					$oMFAUserSettings->Set('validated', 'yes');
+					$oMFAUserSettings->AllowWrite();
+					$oMFAUserSettings->DBUpdate();
+					break;
+			}
+		} catch (MFABaseException $e) {
+			$aParams['sError'] = Dict::S('MFATOTP:Error:ConfigurationFailed');
 		}
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());
@@ -70,11 +82,12 @@ class MFATOTPMyAccountController extends Controller
 	public function OperationMFATOTPMailConfig()
 	{
 		$aParams = [];
-		$sUserId = UserRights::GetUserId();
-		/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
-		$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
-		$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 		try {
+			$sUserId = UserRights::GetUserId();
+			/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
+			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
+			$aParams['oMFAUserSettings'] = $oMFAUserSettings;
+
 			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
 			switch ($sRet) {
 				case MFATOTPService::NO_CODE:
@@ -103,6 +116,7 @@ class MFATOTPMyAccountController extends Controller
 		}
 
 		$aParams['sModuleId'] = MFATOTPHelper::MODULE_NAME;
+		$aParams['sTransactionId'] = utils::GetNewTransactionId();
 		$aParams['sAjaxURL'] = utils::GetAbsoluteUrlExecPage();
 
 		$this->AddSaas(MFATOTPHelper::GetSCSSFile());
@@ -118,6 +132,8 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
+
 			$sEmail = utils::ReadPostedParam('email', '', utils::ENUM_SANITIZATION_FILTER_STRING);
 			$sUserId = UserRights::GetUserId();
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
@@ -141,6 +157,8 @@ class MFATOTPMyAccountController extends Controller
 		$aParams = [];
 
 		try {
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
+
 			$sUserId = UserRights::GetUserId();
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
 			MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);

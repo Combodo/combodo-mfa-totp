@@ -1,7 +1,7 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
-{% extends "MFAUserSettingsConfig.html.twig" %}
+{% extends "MFAUserSettingsConfigBase.html.twig" %}
 
 {% set sTitle = 'MFATOTP:App:Config:Title'|dict_s %}
 
@@ -32,10 +32,10 @@
 {% endblock %}
 
 {% block validation %}
-
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_format(sIssuer, sLabel) } %}
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:App:CodeValidation:explain'|dict_s } %}
+				<input type="hidden" name="transaction_id" value="{{ sTransactionId }}">
 				<input type="text" id="totp_code" name="totp_code" value="" size="6"
 				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
 				       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">

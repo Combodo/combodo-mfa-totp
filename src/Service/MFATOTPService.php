@@ -7,10 +7,10 @@
 namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\MFABase\Helper\MFABaseException;
+use Combodo\iTop\MFABase\Helper\MFABaseHelper;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Exception;
-use MFAUserSettings;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
 use ParagonIE\ConstantTime\Base32;
@@ -107,6 +107,7 @@ class MFATOTPService
 				return self::NO_CODE;
 			}
 
+			MFABaseHelper::GetInstance()->ValidateTransactionId();
 			if ($sCode === false) {
 				MFABaseLog::Debug("TOTP code validation : invalid 'totp_code' received (sanitization)", null,
 					[
