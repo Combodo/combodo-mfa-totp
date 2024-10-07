@@ -28,6 +28,8 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:App:Secret:Copy' => 'Copy secret to clipboard',
 	'MFATOTP:App:Secret:Copy:Done' => 'Secret copied to clipboard',
 	'MFATOTP:App:Label' => 'Username',
+	'MFATOTP:App:Configuration:Error' => 'MFA Configuration failed',
+	'MFATOTP:App:Validation:Error' => 'MFA Validation failed',
 	'MFATOTP:App:CodeValidation:Title' => 'Enter validation code from your authenticator app for: %1$s - %2$s',
 	'MFATOTP:App:CodeValidation:explain' => 'Validate the configuration by typing the code received from the authenticator app',
 
