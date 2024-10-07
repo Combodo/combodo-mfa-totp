@@ -6,6 +6,7 @@ use Combodo\iTop\MFABase\Helper\MFABaseException;
 use Combodo\iTop\MFABase\Service\MFAPortalService;
 use Combodo\iTop\MFABase\Service\MFAUserSettingsService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
+use Combodo\iTop\MFATotp\Service\MFATOTPMailService;
 use Combodo\iTop\MFATotp\Service\MFATOTPService;
 use Combodo\iTop\MFATotp\Service\OTPService;
 use Combodo\iTop\Portal\Hook\iPortalTabContentExtension;
@@ -58,28 +59,48 @@ class MFATotpMailPortalTabContentExtension implements iPortalTabContentExtension
 		/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
 		$this->oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
 		$aData['oMFAUserSettings'] = $this->oMFAUserSettings;
+
 		try {
-			$sRet = MFATOTPService::GetInstance()->ValidateCode($this->oMFAUserSettings);
-			switch ($sRet) {
-				case MFATOTPService::NO_CODE:
-					if ($this->oMFAUserSettings->Get('validated') === 'yes') {
-						$aData['sMessage'] = Dict::S('MFATOTP:Validated');
-					} else {
-						$aData['sError'] = Dict::S('MFATOTP:NotValidated');
-					}
+			$sOperation = utils::ReadPostedParam('operation', null, utils::ENUM_SANITIZATION_FILTER_STRING);
+			switch($sOperation){
+				case 'resend_email':
+					MFATOTPMailService::GetInstance()->SendCodeByEmail($this->oMFAUserSettings);
+					$aData['sMessage'] = Dict::S('MFATOTP:Mail:ResendEmail:Done');
 					break;
 
-				case MFATOTPService::WRONG_CODE:
-					$aData['sError'] = Dict::S('MFATOTP:NotValidated');
-					break;
-
-				case MFATOTPService::CODE_OK:
-					$aData['sMessage'] = Dict::S('MFATOTP:Validated');
-					$this->oMFAUserSettings->Set('validated', 'yes');
-					// Only one validation allowed
-					MFATOTPService::GetInstance()->RegenerateSecret($this->oMFAUserSettings);
+				case 'save_email':
+					$sEmail = utils::ReadPostedParam('email_attribute', '', utils::ENUM_SANITIZATION_FILTER_STRING);
+					$this->oMFAUserSettings->Set('email', $sEmail);
 					$this->oMFAUserSettings->AllowWrite();
 					$this->oMFAUserSettings->DBUpdate();
+					$aData['sMessage'] = Dict::Format('MFATOTP:Mail:Settings:Saved:Done', $sEmail);
+					MFATOTPMailService::GetInstance()->SendCodeByEmail($this->oMFAUserSettings);
+					break;
+
+				default:
+					$sRet = MFATOTPService::GetInstance()->ValidateCode($this->oMFAUserSettings);
+					switch ($sRet) {
+						case MFATOTPService::NO_CODE:
+							if ($this->oMFAUserSettings->Get('validated') === 'yes') {
+								$aData['sMessage'] = Dict::S('MFATOTP:Validated');
+							} else {
+								$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+							}
+							break;
+
+						case MFATOTPService::WRONG_CODE:
+							$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+							break;
+
+						case MFATOTPService::CODE_OK:
+							$aData['sMessage'] = Dict::S('MFATOTP:Validated');
+							$this->oMFAUserSettings->Set('validated', 'yes');
+							// Only one validation allowed
+							MFATOTPService::GetInstance()->RegenerateSecret($this->oMFAUserSettings);
+							$this->oMFAUserSettings->AllowWrite();
+							$this->oMFAUserSettings->DBUpdate();
+							break;
+					}
 					break;
 			}
 		} catch (MFABaseException $e) {

@@ -1,92 +1,10 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
-var saveMFASettingsTimeout = undefined
-
 {% set sFormId = "form_mfa_configure" ~ aData.sAction ~ "_" ~ aData.sClass %}
 function CheckLoginCode() {
 	var sCode = $("#totp_code").val();
 	if (sCode.length === 6) {
 		$("#{{ sFormId }}").trigger("submit");
 	}
-}
-
-function SaveMFASettings() {
-	let successMessage = $('#success-message');
-	successMessage.hide();
-
-	let errorMessage = $("#error-message");
-	errorMessage.hide();
-
-	if (typeof saveMFASettingsTimeout === "number") {
-		clearTimeout(saveMFASettingsTimeout);
-	}
-	saveMFASettingsTimeout = setTimeout(SaveMFASettingsAction, 1000);
-}
-
-function SaveMFASettingsAction()
-{
-	let successMessage = $('#success-message');
-	let errorMessage = $("#error-message");
-	let email = $("#email_attribute").val();
-
-	if (email.includes("@")) {
-		$.ajax({
-			method: "POST",
-			url: "{{ aData.sAjaxURL|raw }}",
-			data: {
-				"exec_module": "{{ aData.sModuleId|raw }}",
-				"exec_page": "index.php",
-				"transaction_id": "{{ aData.sTransactionId|raw }}",
-				"operation": "UpdateMailSettings",
-				"email": email
-			},
-			success: function(data) {
-				if (data.code === 0) {
-					if (data.message) {
-						$('#success-message-content').html(data.message);
-						successMessage.show();
-					}
-				} else {
-					if (data.error) {
-						$('#error-message-content').html(data.error);
-						errorMessage.show();
-					}
-				}
-			}
-		});
-	}
-}
-
-function ResendEmail()
-{
-	let successMessage = $('#success-message');
-	successMessage.hide();
-
-	let errorMessage = $("#error-message");
-	errorMessage.hide();
-
-	$.ajax({
-		method: "POST",
-		url: "{{ aData.sAjaxURL|raw }}",
-		data: {
-			"exec_module": "{{ aData.sModuleId|raw }}",
-			"exec_page": "index.php",
-			"transaction_id": "{{ aData.sTransactionId|raw  }}",
-			"operation": "ResendEmail"
-		},
-		success: function(data) {
-			if (data.code === 0) {
-				if (data.message) {
-					$('#success-message-content').html(data.message);
-					successMessage.show();
-				}
-			} else {
-				if (data.error) {
-					$('#error-message-content').html(data.error);
-					errorMessage.show();
-				}
-			}
-		}
-	});
 }

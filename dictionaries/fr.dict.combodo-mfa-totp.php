@@ -42,7 +42,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:Validation:Title' => 'Multi-Factor Authentication',
 	'MFATOTP:Mail:Settings:Title' => 'Email settings',
 	'MFATOTP:Mail:Settings:email:label' => 'User email',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email has been saved successfully with email %1$s',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. Please re-enter the code received by email to validate this modification',
 	'MFATOTP:Mail:Validation' => 'Validation',
 	'MFATOTP:Mail:CodeValidation:explain' => 'Enter code received by email',
 
