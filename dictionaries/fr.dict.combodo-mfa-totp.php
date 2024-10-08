@@ -40,7 +40,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:Label' => 'Email',
 	'MFATOTP:Mail:CodeValidation:Title' => 'Enter code received by email at %1$s',
 	'MFATOTP:Mail:ResendEmail:Link' => 'Resend code by email at %1$s',
-	'MFATOTP:Mail:ResendEmail:Button' => 'Send validation code',
+	'MFATOTP:Mail:ResendEmail:Button' => 'Send code by email at %1$s',
 	'MFATOTP:Mail:ResendEmail:Button+' => 'In order to validate the configuration click here to receive a code by email',
 	'MFATOTP:Mail:ResendEmail:Done' => 'Email sent',
 	'MFATOTP:Mail:Validation:Title' => 'Multi-Factor Authentication',
@@ -49,6 +49,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. Please re-enter the code received by email to validate this modification',
 	'MFATOTP:Mail:Validation' => 'Validation',
 	'MFATOTP:Mail:CodeValidation:explain' => 'Enter code received by email',
+	'MFATOTP:Mail:ChangeEmail:Button' => 'Submit',
 
 	'MFATOTP:Mail:EmailSubject' => '%1$s - Code to connect. Expires at %3$s',
 	'MFATOTP:Mail:EmailBody' => '<body><p>The code to connect to %1$s as %2$s is</p><strong>%4$s</strong><p></p><p>This code is valid until %3$s</p><p>If you are not trying to connect to %1$s, please contact your administrator.</p>',

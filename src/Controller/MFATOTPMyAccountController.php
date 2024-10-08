@@ -15,7 +15,6 @@ use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Combodo\iTop\MFATotp\Service\MFATOTPMailService;
 use Combodo\iTop\MFATotp\Service\MFATOTPService;
 use Combodo\iTop\MFATotp\Service\OTPService;
-use CoreCannotSaveObjectException;
 use Dict;
 use MFAUserSettingsTOTPApp;
 use MFAUserSettingsTOTPMail;
@@ -86,7 +85,6 @@ class MFATOTPMyAccountController extends Controller
 			$sUserId = UserRights::GetUserId();
 			/** @var \MFAUserSettingsTOTPMail $oMFAUserSettings */
 			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
-			$aParams['oMFAUserSettings'] = $oMFAUserSettings;
 
 			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
 			switch ($sRet) {
@@ -111,6 +109,17 @@ class MFATOTPMyAccountController extends Controller
 					$oMFAUserSettings->DBUpdate();
 					break;
 			}
+			$aParams['oMFAUserSettings'] = $oMFAUserSettings;
+
+			$sEmail = utils::ReadPostedParam('email_attribute', null, utils::ENUM_SANITIZATION_FILTER_STRING);
+			if (!is_null($sEmail) && $sEmail !== $oMFAUserSettings->Get('email')) {
+				$aParams['oMFAUserSettings'] = MFATOTPMailService::GetInstance()->ChangeEmailAddress($oMFAUserSettings, $sEmail);
+				$aParams['sMessage'] = Dict::Format('MFATOTP:Mail:Settings:Saved:Done', $sEmail);
+
+				// Resend the email to validate the code
+				MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);
+			}
+
 		} catch (MFABaseException $e) {
 			$aParams['sError'] = Dict::S('MFATOTP:Error:SendMailFailed');
 		}
@@ -124,31 +133,6 @@ class MFATOTPMyAccountController extends Controller
 		$this->AddLinkedScript(MFABaseHelper::GetJSFile());
 
 		$this->DisplayPage($aParams);
-	}
-
-	public function OperationUpdateMailSettings()
-	{
-		// Ajax call
-		$aParams = [];
-
-		try {
-			MFABaseHelper::GetInstance()->ValidateTransactionId();
-
-			$sEmail = utils::ReadPostedParam('email', '', utils::ENUM_SANITIZATION_FILTER_STRING);
-			$sUserId = UserRights::GetUserId();
-			$oMFAUserSettings = MFAUserSettingsService::GetInstance()->GetMFAUserSettings($sUserId, MFAUserSettingsTOTPMail::class);
-			$oMFAUserSettings->Set('email', $sEmail);
-			$oMFAUserSettings->AllowWrite();
-			$oMFAUserSettings->DBUpdate();
-			$aParams['code'] = 0;
-			$aParams['message'] = Dict::Format('MFATOTP:Mail:Settings:Saved:Done', $sEmail);
-		} catch (CoreCannotSaveObjectException $e) {
-			MFABaseLog::Error(__FUNCTION__.' '.$e->getMessage());
-			$aParams['code'] = 400;
-			$aParams['error'] = Dict::S('MFATOTP:Error:SaveSettingsFailed');
-		}
-
-		$this->DisplayJSONPage($aParams);
 	}
 
 	public function OperationResendEmail()

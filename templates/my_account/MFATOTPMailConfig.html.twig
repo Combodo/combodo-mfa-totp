@@ -10,14 +10,18 @@
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Settings:Title'|dict_s } %}
 		{% UIContentBlock Standard {} %}
 			{{ 'MFA:MFAUserSettingsTOTPMail:Description'|dict_s }}
-			<div class="ibo-v-spacer"></div>
+			{% UIContentBlock Standard { AddCSSClass:'ibo-v-spacer' } %}{% EndUIContentBlock %}
 		{% EndUIContentBlock %}
 
-		{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
-			<input type="text" id="email_attribute" name="email_attribute" value="{{ oMFAUserSettings.Get("email") }}"
-			       class="ibo-input ibo-block ibo-input-string" oninput="SaveMFASettings();"
-			       data-role="ibo-input">
-		{% EndUIField %}
+		{% UIForm Standard {sId:"change_email_form"} %}
+			{% UIInput ForHidden { sName:'transaction_id', sValue:sTransactionId } %}
+
+			{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
+				{% UIInput Standard { sType:'text', sId:'email_attribute', sName:'email_attribute', sValue:oMFAUserSettings.Get("email") }  %}
+			{% EndUIField %}
+
+			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ChangeEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ChangeEmail:Button+'|dict_s, bIsSubmit:true } %}
+		{% EndUIForm %}
 	{% EndUIFieldSet %}
 
 {% endblock %}
@@ -25,13 +29,13 @@
 {% block validation %}
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
 		{% UIField Small { sLabel:'' } %}
-			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s, OnClickJsCode:"ResendEmail();" } %}
+			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_format(oMFAUserSettings.Get("email")), ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s, OnClickJsCode:"ResendEmail();" } %}
 		{% EndUIField %}
+		{% UIContentBlock Standard { AddCSSClass:'ibo-v-spacer' } %}{% EndUIContentBlock %}
 
-		<div class="ibo-v-spacer"></div>
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:Mail:CodeValidation:explain'|dict_s } %}
-				<input type="hidden" name="transaction_id" value="{{ sTransactionId }}">
+				{% UIInput ForHidden { sName:'transaction_id', sValue:sTransactionId } %}
 				<input type="text" id="totp_code" name="totp_code" value="" size="6"
 				       class="ibo-input ibo-block ibo-mfa--code-input" oninput="CheckLoginCode();"
 				       data-role="ibo-input" placeholder="{{ 'MFATOTP:EnterCode'|dict_s }}">

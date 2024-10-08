@@ -1,58 +1,6 @@
 {# @copyright   Copyright (C) 2010-2024 Combodo SARL #}
 {# @license     http://opensource.org/licenses/AGPL-3.0 #}
 
-var saveMFASettingsTimeout = undefined
-
-function SaveMFASettings() {
-	let successMessage = $('#success-message');
-	if (!successMessage.hasClass('ibo-is-hidden')) {
-		successMessage.addClass('ibo-is-hidden');
-	}
-
-	let errorMessage = $("#error-message");
-	if (!errorMessage.hasClass('ibo-is-hidden')) {
-		errorMessage.addClass('ibo-is-hidden');
-	}
-
-	if (typeof saveMFASettingsTimeout === "number") {
-		clearTimeout(saveMFASettingsTimeout);
-	}
-	saveMFASettingsTimeout = setTimeout(SaveMFASettingsAction, 1000);
-}
-
-function SaveMFASettingsAction()
-{
-	let successMessage = $('#success-message');
-	let errorMessage = $("#error-message");
-	let email = $("#email_attribute").val();
-
-	if (email.includes("@")) {
-		$.ajax({
-			method: "POST",
-			url: "{{ sAjaxURL|raw }}",
-			data: {
-				"exec_module": "{{ sModuleId }}",
-				"exec_page": "index.php",
-				"transaction_id": "{{ sTransactionId }}",
-				"operation": "UpdateMailSettings",
-				"email": email
-			},
-			success: function(data) {
-				if (data.code === 0) {
-					if (data.message) {
-						$('#success-message-content').html(data.message);
-						successMessage.removeClass('ibo-is-hidden')
-					}
-				} else {
-					if (data.error) {
-						$('#error-message-content').html(data.error);
-						errorMessage.removeClass('ibo-is-hidden')
-					}
-				}
-			}
-		});
-	}
-}
 
 function ResendEmail()
 {

@@ -242,4 +242,25 @@ class MFATOTPMailService
 			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}
 	}
+
+	/**
+	 *
+	 * @param \MFAUserSettingsTOTPMail $oMFAUserSettings
+	 * @param $sEmail
+	 *
+	 * @return \MFAUserSettingsTOTPMail
+	 * @throws \Combodo\iTop\MFABase\Helper\MFABaseException
+	 */
+	public function ChangeEmailAddress(MFAUserSettingsTOTPMail $oMFAUserSettings, $sEmail): MFAUserSettingsTOTPMail
+	{
+		try {
+			$oMFAUserSettings->Set('email', $sEmail);
+			$oMFAUserSettings->AllowWrite();
+			$oMFAUserSettings->DBUpdate();
+		} catch (Exception $e) {
+			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
+		}
+
+		return $oMFAUserSettings;
+	}
 }
