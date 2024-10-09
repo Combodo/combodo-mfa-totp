@@ -24,10 +24,12 @@ use utils;
 class MFATOTPMailService
 {
 	private static MFATOTPMailService $oInstance;
+	private Email $oEmail;
 
 	protected function __construct()
 	{
 		MFABaseLog::Enable();
+		$this->oEmail = new EMail();
 	}
 
 	final public static function GetInstance(): MFATOTPMailService
@@ -37,6 +39,14 @@ class MFATOTPMailService
 		}
 
 		return static::$oInstance;
+	}
+
+	public function GetEmail(): Email {
+		return $this->oEmail;
+	}
+
+	public function SetEmail(Email $oEmail): void {
+		$this->oEmail = $oEmail;
 	}
 
 	/**
@@ -71,13 +81,12 @@ class MFATOTPMailService
 				'expiration' => $sExpiration,
 			]);
 
-			$oEmail = new Email();
-			$oEmail->SetRecipientTO($sEmail);
+			$this->GetEmail()->SetRecipientTO($sEmail);
 			$sFrom = MetaModel::GetConfig()->Get('email_default_sender_address');
-			$oEmail->SetRecipientFrom($sFrom);
-			$oEmail->SetSubject(Dict::Format('MFATOTP:Mail:EmailSubject', $oTOTPService->sIssuer, $sUser, $sExpiration));
-			$oEmail->SetBody(Dict::Format('MFATOTP:Mail:EmailBody', $oTOTPService->sIssuer, $sUser, $sExpiration, $sCode));
-			$iRes = $oEmail->Send($aIssues, true);
+			$this->GetEmail()->SetRecipientFrom($sFrom);
+			$this->GetEmail()->SetSubject(Dict::Format('MFATOTP:Mail:EmailSubject', $oTOTPService->sIssuer, $sUser, $sExpiration));
+			$this->GetEmail()->SetBody(Dict::Format('MFATOTP:Mail:EmailBody', $oTOTPService->sIssuer, $sUser, $sExpiration, $sCode));
+			$iRes = $this->GetEmail()->Send($aIssues, true);
 			switch ($iRes) {
 				//case EMAIL_SEND_PENDING:
 				case EMAIL_SEND_OK:
