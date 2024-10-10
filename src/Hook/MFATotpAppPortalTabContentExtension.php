@@ -7,17 +7,16 @@ use Combodo\iTop\MFABase\Service\MFAUserSettingsService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use Combodo\iTop\MFATotp\Service\MFATOTPService;
 use Combodo\iTop\MFATotp\Service\OTPService;
-use Combodo\iTop\Portal\Hook\iPortalTabContentExtension;
-use Combodo\iTop\Portal\Hook\iPortalTabSectionExtension;
+use Combodo\iTop\Portal\Hook\iUserProfileTabContentExtension;
 use Combodo\iTop\Portal\Twig\PortalBlockExtension;
 use Combodo\iTop\Portal\Twig\PortalTwigContext;
 use Dict;
 use MFAUserSettingsTOTPApp;
 use UserRights;
 
-if (interface_exists('Combodo\iTop\Portal\Hook\iPortalTabContentExtension')) {
+if (interface_exists(iUserProfileTabContentExtension::class)) {
 
-	class MFATotpAppPortalTabContentExtension implements iPortalTabContentExtension
+	class MFATotpAppPortalTabContentExtension implements iUserProfileTabContentExtension
 	{
 		private $oMFAUserSettings;
 
@@ -43,11 +42,6 @@ if (interface_exists('Combodo\iTop\Portal\Hook\iPortalTabContentExtension')) {
 		public function GetSectionRank(): float
 		{
 			return 0;
-		}
-
-		public function GetTarget(): string
-		{
-			return 'p_user_profile_brick';
 		}
 
 		/**
