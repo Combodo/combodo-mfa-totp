@@ -52,16 +52,16 @@ class MFATOTPMyAccountController extends Controller
 			switch ($sRet) {
 				case MFATOTPService::NO_CODE:
 					if ($oMFAUserSettings->Get('validated') === 'yes') {
-						$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+						$aParams['sMessage'] = Dict::S('MFATOTP:App:Validated');
 					}
 					break;
 
 				case MFATOTPService::WRONG_CODE:
-					$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
+					$aParams['sError'] = Dict::S('MFATOTP:App:NotValidated');
 					break;
 
 				case MFATOTPService::CODE_OK:
-					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+					$aParams['sMessage'] = Dict::S('MFATOTP:App:Validated');
 					$oMFAUserSettings->Set('validated', 'yes');
 					$oMFAUserSettings->AllowWrite();
 					$oMFAUserSettings->DBUpdate();
@@ -90,18 +90,18 @@ class MFATOTPMyAccountController extends Controller
 			switch ($sRet) {
 				case MFATOTPService::NO_CODE:
 					if ($oMFAUserSettings->Get('validated') === 'yes') {
-						$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+						$aParams['sMessage'] = Dict::S('MFATOTP:Mail:Validated');
 					} else {
-						$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
+						$aParams['sError'] = Dict::S('MFATOTP:Mail:NotValidated');
 					}
 					break;
 
 				case MFATOTPService::WRONG_CODE:
-					$aParams['sError'] = Dict::S('MFATOTP:NotValidated');
+					$aParams['sError'] = Dict::S('MFATOTP:Mail:NotValidated');
 					break;
 
 				case MFATOTPService::CODE_OK:
-					$aParams['sMessage'] = Dict::S('MFATOTP:Validated');
+					$aParams['sMessage'] = Dict::S('MFATOTP:Mail:Validated');
 					$oMFAUserSettings->Set('validated', 'yes');
 					// Only one validation allowed
 					MFATOTPService::GetInstance()->RegenerateSecret($oMFAUserSettings);

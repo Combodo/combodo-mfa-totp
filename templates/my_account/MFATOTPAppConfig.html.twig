@@ -7,6 +7,11 @@
 
 {% block configuration %}
 
+	{% UIContentBlock Standard {} %}
+		{{ 'MFATOTP:App:Config:Description'|dict_s }}
+		<div class="ibo-v-spacer"></div>
+	{% EndUIContentBlock %}
+
 	{% UIFieldSet Standard { sLegend:'MFATOTP:App:Configure'|dict_s } %}
 		{% UIContentBlock Standard {} %}
 			{{ 'MFA:MFAUserSettingsTOTPApp:Description'|dict_s }}
@@ -26,9 +31,13 @@
 		{% EndUIField %}
 		{% UIField Small { sLabel:'MFATOTP:Issuer'|dict_s } %}
 			{{ sIssuer }}
+			{% set jscopy = 'WriteClipboardText("' ~ sIssuer ~ '", "' ~ 'MFATOTP:App:Issuer:Copy:Done'|dict_s ~ '");' %}
+			{% UIButton IconAction { sIconClasses:'fas fa-clone copypaste', sTooltipText:'MFATOTP:App:Issuer:Copy'|dict_s, OnClickJsCode:jscopy } %}
 		{% EndUIField %}
 		{% UIField Small { sLabel:'MFATOTP:App:Label'|dict_s } %}
 			{{ sLabel }}
+			{% set jscopy = 'WriteClipboardText("' ~ sLabel ~ '", "' ~ 'MFATOTP:App:Username:Copy:Done'|dict_s ~ '");' %}
+			{% UIButton IconAction { sIconClasses:'fas fa-clone copypaste', sTooltipText:'MFATOTP:App:Username:Copy'|dict_s, OnClickJsCode:jscopy } %}
 		{% EndUIField %}
 
 	{% EndUIFieldSet %}
@@ -36,7 +45,7 @@
 {% endblock %}
 
 {% block validation %}
-	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_format(sIssuer, sLabel) } %}
+	{% UIFieldSet Standard { sLegend:'MFATOTP:App:CodeValidation:Title'|dict_s } %}
 		{% UIForm Standard {sId:"totp_form"} %}
 			{% UIField Small { sLabel:'MFATOTP:App:CodeValidation:explain'|dict_s } %}
 				<input type="hidden" name="transaction_id" value="{{ sTransactionId }}">

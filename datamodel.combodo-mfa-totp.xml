@@ -419,10 +419,13 @@
             <item id="secret">
               <rank>30</rank>
             </item>
-            <item id="is_default">
-              <rank>50</rank>
+            <item id="code_validity">
+              <rank>40</rank>
             </item>
             <item id="epoch">
+              <rank>50</rank>
+            </item>
+            <item id="is_default">
               <rank>60</rank>
             </item>
           </items>
