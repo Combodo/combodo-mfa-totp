@@ -57,16 +57,16 @@ if (interface_exists(iUserProfileTabContentExtension::class)) {
 			switch ($sRet) {
 				case MFATOTPService::NO_CODE:
 					if ($this->oMFAUserSettings->Get('validated') === 'yes') {
-						$aData['sMessage'] = Dict::S('MFATOTP:Validated');
+						$aData['sMessage'] = Dict::S('MFATOTP:App:Validated');
 					}
 					break;
 
 				case MFATOTPService::WRONG_CODE:
-					$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+					$aData['sError'] = Dict::S('MFATOTP:App:NotValidated');
 					break;
 
 				case MFATOTPService::CODE_OK:
-					$aData['sMessage'] = Dict::S('MFATOTP:Validated');
+					$aData['sMessage'] = Dict::S('MFATOTP:App:Validated');
 					$this->oMFAUserSettings->Set('validated', 'yes');
 					$this->oMFAUserSettings->AllowWrite();
 					$this->oMFAUserSettings->DBUpdate();

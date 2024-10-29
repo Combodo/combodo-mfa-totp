@@ -78,18 +78,18 @@ if (interface_exists(iUserProfileTabContentExtension::class)) {
 						switch ($sRet) {
 							case MFATOTPService::NO_CODE:
 								if ($this->oMFAUserSettings->Get('validated') === 'yes') {
-									$aData['sMessage'] = Dict::S('MFATOTP:Validated');
+									$aData['sMessage'] = Dict::S('MFATOTP:Mail:Validated');
 								} else {
-									$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+									$aData['sError'] = Dict::S('MFATOTP:Mail:NotValidated');
 								}
 								break;
 
 							case MFATOTPService::WRONG_CODE:
-								$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+								$aData['sError'] = Dict::S('MFATOTP:Mail:NotValidated');
 								break;
 
 							case MFATOTPService::CODE_OK:
-								$aData['sMessage'] = Dict::S('MFATOTP:Validated');
+								$aData['sMessage'] = Dict::S('MFATOTP:Mail:Validated');
 								$this->oMFAUserSettings->Set('validated', 'yes');
 								// Only one validation allowed
 								MFATOTPService::GetInstance()->RegenerateSecret($this->oMFAUserSettings);

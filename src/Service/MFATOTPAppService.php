@@ -51,7 +51,7 @@ class MFATOTPAppService
 			$sRet = MFATOTPService::GetInstance()->ValidateCode($oMFAUserSettings);
 			switch ($sRet) {
 				case MFATOTPService::WRONG_CODE:
-					$aData['sError'] = Dict::S('MFATOTP:NotValidated');
+					$aData['sError'] = Dict::S('MFATOTP:App:NotValidated');
 					break;
 
 				case MFATOTPService::CODE_OK:

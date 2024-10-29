@@ -29,7 +29,7 @@
 {% block validation %}
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
 		{% UIField Small { sLabel:'' } %}
-			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_format(oMFAUserSettings.Get("email")), ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s, OnClickJsCode:"ResendEmail();" } %}
+			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s, OnClickJsCode:"ResendEmail();" } %}
 		{% EndUIField %}
 		{% UIContentBlock Standard { AddCSSClass:'ibo-v-spacer' } %}{% EndUIContentBlock %}
 
