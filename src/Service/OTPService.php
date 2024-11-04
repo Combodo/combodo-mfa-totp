@@ -25,6 +25,11 @@ class OTPService
 		$this->oTotp = $this->GetTotp();
 	}
 
+	public function GetProvisioningUri(): string
+	{
+		return $this->oTotp->getProvisioningUri();
+	}
+
 	private function GetQRCodeData(): string
 	{
 		return urldecode($this->oTotp->getProvisioningUri());
