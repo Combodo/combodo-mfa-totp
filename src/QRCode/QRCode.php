@@ -743,7 +743,9 @@ class QRUtil
 
 	static function getMaxLength($typeNumber, $mode, $errorCorrectLevel)
 	{
-
+		if ($typeNumber < 1 || $typeNumber > 9) {
+			trigger_error("typeNumber:$typeNumber", E_USER_ERROR);
+		}
 		$t = $typeNumber - 1;
 		$e = 0;
 		$m = 0;
