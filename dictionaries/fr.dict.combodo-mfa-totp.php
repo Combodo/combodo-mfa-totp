@@ -35,7 +35,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:App:Label' => 'Nom d\'utilisateur',
 	'MFATOTP:App:Configuration:Error' => 'Échec de la configuration MFA',
 	'MFATOTP:App:Validation:Error' => 'Échec de la validation MFA',
-	'MFATOTP:App:CodeValidation:Title' => 'Code de validation',
+	'MFATOTP:App:CodeValidation:Title' => 'Valider le code de votre app d\'authentification',
 	'MFATOTP:App:CodeValidation:explain' => 'Valider le code fourni par l\'app',
 
 	'MFATOTP:Mail:Validated' => 'Email validé',

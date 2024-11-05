@@ -113,6 +113,7 @@ class MFATOTPAppService
 			/** @var \MFAUserSettingsTOTP $oMFAUserSettings */
 			$oTOTPService = new OTPService($oMFAUserSettings);
 
+			$aData['sTitle'] = Dict::S('Login:MFA:Validation:Title');
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sTransactionId'] = utils::GetNewTransactionId();

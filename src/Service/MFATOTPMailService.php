@@ -161,7 +161,7 @@ class MFATOTPMailService
 		try {
 			$oTOTPService = new OTPService($oMFAUserSettings);
 
-			$aData['sTitle'] = Dict::S('MFATOTP:Mail:Validation:Title');
+			$aData['sTitle'] = Dict::S('Login:MFA:Validation:Title');
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sTransactionId'] = utils::GetNewTransactionId();
