@@ -57,7 +57,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:ChangeEmail:Button' => 'Envoyer',
 
 	'MFATOTP:Mail:EmailSubject' => '%1$s - Code de connexion. Expire le %3$s',
-	'MFATOTP:Mail:EmailBody' => '<body><p>The code to connect to %1$s as %2$s is</p><strong>%4$s</strong><p></p><p>This code is valid until %3$s</p><p>If you are not trying to connect to %1$s, please contact your administrator.</p>',
+	'MFATOTP:Mail:EmailBody' => '<body><p>Le code pour se connecter à %1$s en tant que %2$s est </p><strong>%4$s</strong><p></p><p>Ce code est valide jusqu\'à %3$s</p><p>Si vous n\'essayez pas de vous connecter à %1$s, veuillez contacter votre administrateur.</p>',
 
 	'MFATOTP:Error:SendMailFailed' => 'Erreur: échec de l\'envoi d\'email',
 	'MFATOTP:Error:ConfigurationFailed' => 'Erreur: échec de la configuration de l\'app MFA',
