@@ -67,10 +67,11 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:MFAUserSettingsTOTP' => 'TOTP based Multi-Factor Authentication',
 	'Class:MFAUserSettingsTOTP/Attribute:secret' => 'Secret',
 	'Class:MFAUserSettingsTOTP/Attribute:code_validity' => 'Code validity',
-	'Class:MFAUserSettingsTOTP/Attribute:epoch' => 'Base date for code computation (in s from 01-01-1970)',
+	'Class:MFAUserSettingsTOTP/Attribute:epoch' => 'Base date for code computation',
+	'Class:MFAUserSettingsTOTP/Attribute:epoch+' => 'In s from 01-01-1970',
 
 	'Class:MFAUserSettingsTOTPApp' => 'TOTP by application',
 
-	'Class:MFAUserSettingsTOTPMail' => 'email',
+	'Class:MFAUserSettingsTOTPMail' => 'Email',
 	'Class:MFAUserSettingsTOTPMail/Attribute:email' => 'Email',
 ));
