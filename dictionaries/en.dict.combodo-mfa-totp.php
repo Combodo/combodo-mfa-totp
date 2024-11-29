@@ -21,9 +21,11 @@ Dict::Add('EN US', 'English', 'English', array(
 
 	'MFATOTP:App:Validated' => 'Valid app',
 	'MFATOTP:App:NotValidated' => 'Wrong code',
-	'MFATOTP:App:Config:Title' => 'Configure your TOTP by app',
+	'MFATOTP:App:Config:Title' => 'Authenticator App',
 	'MFATOTP:App:Config:Description' => 'Scan the QR code and validate the configuration by entering the code provided by your external app',
 	'MFATOTP:App:Configure' => 'QR code',
+	'MFATOTP:App:Config:CannotScan' => 'Cannot scan?',
+	'MFATOTP:App:Config:SwitchToData' => 'Switch to data',
 	'MFATOTP:App:ScanQRCode' => 'Scan the following QR Code',
 	'MFATOTP:App:EnterValues' => 'Unable to scan? Enter the following values manually',
 	'MFATOTP:App:Secret' => 'Secret',

@@ -7,3 +7,11 @@ function CheckLoginCode() {
 		$("#totp_form").trigger("submit");
 	}
 }
+
+$(".ibo-mfa-login-totp-alt").hide();
+
+$(".ibo-mfa-login-totp-switch-action").click(function() {
+	$(".ibo-mfa--qr-code").hide();
+	$(".ibo-mfa-login-totp-switch-to-data").hide();
+	$(".ibo-mfa-login-totp-alt").show();
+});

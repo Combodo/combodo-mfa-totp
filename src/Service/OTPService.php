@@ -7,7 +7,6 @@
 namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\MFATotp\QRCode\QRCode;
-use MFAUserSettings;
 use MFAUserSettingsTOTP;
 use MFAUserSettingsTOTPApp;
 use OTPHP\TOTP;
@@ -43,7 +42,7 @@ class OTPService
 		$oQRCode->setFgColor('#2A4265');
 		$oQRCode->setBgColor('#FCFCFD');
 
-		$sQRCodeSVG = $oQRCode->getImageSVG(6);
+		$sQRCodeSVG = $oQRCode->getImageSVG(3, 2, 161);
 
 		return $sQRCodeSVG;
 	}

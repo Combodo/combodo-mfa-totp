@@ -25,6 +25,8 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'MFATOTP:App:Config:Title' => 'TOTP mit der App konfigurieren',
 	'MFATOTP:App:Config:Description' => 'Scannen Sie den QR-Code und überprüfen Sie die Konfiguration, indem Sie den von Ihrer Authenticator-App bereitgestellten Code eingeben',
 	'MFATOTP:App:Configure' => 'QR-Code',
+	'MFATOTP:App:Config:CannotScan' => 'Kann nicht gescannt werden?',
+	'MFATOTP:App:Config:SwitchToData' => 'Zu den Daten wechseln',
 	'MFATOTP:App:ScanQRCode' => 'Scannen Sie den folgenden QR-Code',
 	'MFATOTP:App:EnterValues' => 'Kann nicht gescannt werden? Geben Sie die folgenden Werte manuell ein',
 	'MFATOTP:App:Secret' => 'Secret',

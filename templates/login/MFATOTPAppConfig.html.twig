@@ -4,12 +4,19 @@
 
 <div class="ibo-mfa--qr-code">{{ aData.sQRCodeSVG|raw }}</div>
 <div class="ibo-mfa-login-text">
-	<p>{{ 'MFATOTP:App:Secret'|dict_s }} {{ aData.sSecret }}</p>
-	<p>{{ 'MFATOTP:Issuer'|dict_s }} {{ aData.sIssuer }}</p>
-	<p>{{ 'MFATOTP:App:Label'|dict_s }} {{ aData.sLabel }}</p>
+	<div class="ibo-mfa-login-totp-switch-to-data">
+		<p>
+			{{ 'MFATOTP:App:Config:CannotScan'|dict_s }}
+			<a class="ibo-mfa-login-totp-switch-action">{{ 'MFATOTP:App:Config:SwitchToData'|dict_s }}</a>
+		</p>
+	</div>
+	<div class="ibo-mfa-login-totp-alt">
+		<p>{{ 'MFATOTP:App:Secret'|dict_s }} {{ aData.sSecret }}</p>
+		<p>{{ 'MFATOTP:Issuer'|dict_s }} {{ aData.sIssuer }}</p>
+		<p>{{ 'MFATOTP:App:Label'|dict_s }} {{ aData.sLabel }}</p>
+	</div>
 	<p>&nbsp;</p>
 	<p>{{ 'MFATOTP:App:CodeValidation:Title'|dict_format(aData.sIssuer, aData.sLabel)|raw }}</p>
-	<p>&nbsp;</p>
 </div>
 <form id="totp_form" method="post">
 	<div>
