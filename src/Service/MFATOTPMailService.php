@@ -9,6 +9,7 @@ namespace Combodo\iTop\MFATotp\Service;
 use Combodo\iTop\Application\Helper\Session;
 use Combodo\iTop\MFABase\Helper\MFABaseException;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
+use Combodo\iTop\MFABase\Service\MFABaseLoginService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
 use DateInterval;
 use DateTime;
@@ -169,6 +170,10 @@ class MFATOTPMailService
 			$oLoginContext = $this->ValidateCode($oMFAUserSettings, $aData);
 			if (!is_null($oLoginContext)) {
 				return $oLoginContext;
+			}
+
+			if (Session::IsSet(MFABaseLoginService::MFA_LOGIN_VALIDATION_ERROR)) {
+				$aData['sError'] = Dict::S('Login:MFA:Validation:Error');
 			}
 
 			$this->SendCodeByEmail($oMFAUserSettings);
