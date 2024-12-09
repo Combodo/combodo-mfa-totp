@@ -166,6 +166,7 @@ class MFATOTPMailService
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sTransactionId'] = utils::GetNewTransactionId();
+			//$aData['oMFAUserSettings'] = $oMFAUserSettings;
 
 			$oLoginContext = $this->ValidateCode($oMFAUserSettings, $aData);
 			if (!is_null($oLoginContext)) {
