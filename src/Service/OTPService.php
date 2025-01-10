@@ -80,7 +80,7 @@ class OTPService
 		} else {
 			$this->sLabel = $this->oMFAUserSettings->Get('email');
 		}
-		$this->sIssuer = urlencode(ITOP_APPLICATION);
+		$this->sIssuer = ITOP_APPLICATION;
 		$oTotp->setLabel($this->sLabel);
 		$oTotp->setIssuer($this->sIssuer);
 		$oTotp->setIssuerIncludedAsParameter(true);
