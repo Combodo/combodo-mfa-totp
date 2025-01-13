@@ -91,8 +91,6 @@ class MFATOTPMyAccountController extends Controller
 				case MFATOTPService::NO_CODE:
 					if ($oMFAUserSettings->Get('validated') === 'yes') {
 						$aParams['sMessage'] = Dict::S('MFATOTP:Mail:Validated');
-					} else {
-						$aParams['sError'] = Dict::S('MFATOTP:Mail:NotValidated');
 					}
 					break;
 
@@ -115,9 +113,6 @@ class MFATOTPMyAccountController extends Controller
 			if (!is_null($sEmail) && $sEmail !== $oMFAUserSettings->Get('email')) {
 				$aParams['oMFAUserSettings'] = MFATOTPMailService::GetInstance()->ChangeEmailAddress($oMFAUserSettings, $sEmail);
 				$aParams['sMessage'] = Dict::Format('MFATOTP:Mail:Settings:Saved:Done', $sEmail);
-
-				// Resend the email to validate the code
-				MFATOTPMailService::GetInstance()->SendCodeByEmail($oMFAUserSettings);
 			}
 
 		} catch (MFABaseException $e) {
