@@ -3,25 +3,24 @@
 
 <div class="col-sm-6">
 	<div class="panel panel-default">
+		{% set sEmail = aData.oMFAUserSettings.Get("email") %}
+		{% if sEmail %}
+			{% set sEmailSettingsTitle = 'MFATOTP:Mail:Settings:Step1:ChangeEmailOptional'|dict_s %}
+			{% set sEmailSettingsAction = 'MFATOTP:Mail:ChangeEmail:Button'|dict_s %}
+		{% else %}
+			{% set sEmailSettingsTitle = 'MFATOTP:Mail:Settings:Step1:SetEmail'|dict_s %}
+			{% set sEmailSettingsAction = 'MFATOTP:Mail:SetEmail:Button'|dict_s %}
+		{% endif %}
 		<div class="panel-heading">
-			<h3 class="panel-title">{{ 'MFATOTP:Mail:Config:Title'|dict_s }}</h3>
+			<h3 class="panel-title">{{ sEmailSettingsTitle }}</h3>
 		</div>
 		<div class="panel-body">
-			<div class="form_alerts">
-				{% if aData.sMessage is defined %}
-					<div class="alert alert-success" role="alert">{{ aData.sMessage }}</div>
-				{% endif %}
-				{% if aData.sError is defined %}
-					<div class="alert alert-error alert-danger" role="alert">{{ aData.sError }}</div>
-				{% endif %}
-			</div>
-
-			<div class="form_field_control">
-				<div class="form-control-static">{{ 'MFA:MFAUserSettingsTOTPMail:Description'|dict_s }}</div>
-			</div>
-
 			<div class="form_field_label">
 				<label class="control-label">{{ 'MFATOTP:Mail:Settings:email:label'|dict_s }}</label>
+			</div>
+
+			<div class="help-block">
+				{{ 'MFATOTP:Mail:Settings:email:label+'|dict_s }}
 			</div>
 
 			<div class="form-group form_group_small">
@@ -31,14 +30,14 @@
 					<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
 					<input type="hidden" name="class" value="{{ aData.sClass }}">
 					<div class="form_field_control">
-						<input type="text" id="email_attribute" name="email_attribute" value="{{ aData.oMFAUserSettings.Get("email") }}"
+						<input type="text" id="email_attribute" name="email_attribute" value="{{ sEmail }}"
 						       class="form-control">
 					</div>
 					<div class="form_field_label">&nbsp;</div>
 					<div class="form_field_control">
 						<div class="form_btn_regular">
 							<input class="btn btn-primary form_btn_submit" type="submit"
-							       value="{{ 'Portal:Button:Submit'|dict_s }}">
+							       value="{{ sEmailSettingsAction }}">
 						</div>
 					</div>
 				</form>
@@ -53,6 +52,9 @@
 			<h3 class="panel-title">{{ 'MFATOTP:Mail:Validation'|dict_s }}</h3>
 		</div>
 		<div class="panel-body">
+			<div class="form_field_label">
+				<label class="control-label">{{ 'MFA:MFAUserSettingsTOTPMail:Description'|dict_s }}</label>
+			</div>
 			<div class="form-group form_group_small">
 				<form id="form_mfa_configure_resend_email" class="" style="display:inline-block;" method="POST">
 					<input type="hidden" name="action" value="configure">

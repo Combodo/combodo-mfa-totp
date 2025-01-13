@@ -304,7 +304,7 @@
         <field id="email" xsi:type="AttributeEmailAddress">
           <sql>email</sql>
           <default_value/>
-          <is_null_allowed>false</is_null_allowed>
+          <is_null_allowed>true</is_null_allowed>
         </field>
       </fields>
       <event_listeners>

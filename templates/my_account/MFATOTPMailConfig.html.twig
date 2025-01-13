@@ -6,29 +6,35 @@
 {% set sTitle = 'MFATOTP:Mail:Config:Title'|dict_s %}
 
 {% block configuration %}
+	{% set sEmail = oMFAUserSettings.Get("email") %}
+	{% if sEmail %}
+		{% set sEmailSettingsTitle = 'MFATOTP:Mail:Settings:Step1:ChangeEmailOptional'|dict_s %}
+		{% set sEmailSettingsAction = 'MFATOTP:Mail:ChangeEmail:Button'|dict_s %}
+	{% else %}
+		{% set sEmailSettingsTitle = 'MFATOTP:Mail:Settings:Step1:SetEmail'|dict_s %}
+		{% set sEmailSettingsAction = 'MFATOTP:Mail:SetEmail:Button'|dict_s %}
+	{% endif %}
 
-	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Settings:Title'|dict_s } %}
-		{% UIContentBlock Standard {} %}
-			{{ 'MFA:MFAUserSettingsTOTPMail:Description'|dict_s }}
-			{% UIContentBlock Standard { AddCSSClass:'ibo-v-spacer' } %}{% EndUIContentBlock %}
-		{% EndUIContentBlock %}
-
+	{% UIFieldSet Standard { sLegend:sEmailSettingsTitle } %}
 		{% UIForm Standard {sId:"change_email_form"} %}
 			{% UIInput ForHidden { sName:'transaction_id', sValue:sTransactionId } %}
 
-			{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s } %}
-				{% UIInput Standard { sType:'text', sId:'email_attribute', sName:'email_attribute', sValue:oMFAUserSettings.Get("email") }  %}
+			{% UIField Small { sLabel:'MFATOTP:Mail:Settings:email:label'|dict_s, sDescription:'MFATOTP:Mail:Settings:email:label+'|dict_s } %}
+				{% if sEmail %}
+					{% UIInput Standard { sType:'text', sId:'email_attribute', sName:'email_attribute', sValue:sEmail }  %}
+				{% else %}
+					{% UIInput Standard { sType:'text', sId:'email_attribute', sName:'email_attribute', sValue:'' }  %}
+				{% endif %}
 			{% EndUIField %}
 
-			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ChangeEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ChangeEmail:Button+'|dict_s, bIsSubmit:true } %}
+			{% UIButton ForPrimaryAction { sLabel:sEmailSettingsAction, bIsSubmit:true } %}
 		{% EndUIForm %}
 	{% EndUIFieldSet %}
-
 {% endblock %}
 
 {% block validation %}
 	{% UIFieldSet Standard { sLegend:'MFATOTP:Mail:Validation'|dict_s } %}
-		{% UIField Small { sLabel:'' } %}
+		{% UIField Small { sLabel:'MFA:MFAUserSettingsTOTPMail:Description'|dict_s } %}
 			{% UIButton ForPrimaryAction { sLabel:'MFATOTP:Mail:ResendEmail:Button'|dict_s, ToolTip:'MFATOTP:Mail:ResendEmail:Button+'|dict_s, OnClickJsCode:"ResendEmail();" } %}
 		{% EndUIField %}
 		{% UIContentBlock Standard { AddCSSClass:'ibo-v-spacer' } %}{% EndUIContentBlock %}
@@ -42,7 +48,5 @@
 			{% EndUIField %}
 		{% EndUIForm %}
 	{% EndUIFieldSet %}
-
-
 {% endblock %}
 

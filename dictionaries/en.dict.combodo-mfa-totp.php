@@ -15,7 +15,6 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFA:MFAUserSettingsTOTPMail:Description' => 'Send a code by email valid for 10 minutes',
 
 	'MFATOTP:Redirection:Title' => 'Redirecting to home page...',
-
 	'MFATOTP:EnterCode' => 'Code',
 	'MFATOTP:Issuer' => 'Issuer',
 
@@ -41,23 +40,25 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFATOTP:App:CodeValidation:Title' => 'Validate the code from your authenticator app',
 	'MFATOTP:App:CodeValidation:explain' => 'Validate the code from the app',
 
+	'MFATOTP:Mail:Validation:Title' => 'Multi-Factor Authentication',
+	'MFATOTP:Mail:Config:Title' => 'Configure MFA by email',
+	'MFATOTP:Mail:Settings:Step1:SetEmail' => 'Step 1: define the MFA email',
+	'MFATOTP:Mail:Settings:Step1:ChangeEmailOptional' => 'Step 1: Change the MFA email (optional)',
+	'MFATOTP:Mail:Settings:email:label' => 'MFA email',
+	'MFATOTP:Mail:Settings:email:label+' => 'Email used to send MFA code, by default the email of the user',
+	'MFATOTP:Mail:SetEmail:Button' => 'Set MFA email',
+	'MFATOTP:Mail:ChangeEmail:Button' => 'Change MFA email',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. A code has been sent by email, please re-enter the code received to validate this modification',
 	'MFATOTP:Mail:Validated' => 'Email validated',
 	'MFATOTP:Mail:NotValidated' => 'Wrong code',
+
 	'MFATOTP:Mail:EnterCode' => 'Enter code received by email',
-	'MFATOTP:Mail:Config:Title' => 'Configure MFA by email',
-	'MFATOTP:Mail:Label' => 'Email',
 	'MFATOTP:Mail:CodeValidation:Title' => 'Enter code received by email at %1$s',
 	'MFATOTP:Mail:ResendEmail:Link' => 'Resend code by email',
 	'MFATOTP:Mail:ResendEmail:Button' => 'Send code by email',
-	'MFATOTP:Mail:ResendEmail:Button+' => 'In order to validate the configuration click here to receive a code by email',
 	'MFATOTP:Mail:ResendEmail:Done' => 'Email sent',
-	'MFATOTP:Mail:Validation:Title' => 'Multi-Factor Authentication',
-	'MFATOTP:Mail:Settings:Title' => 'Email settings',
-	'MFATOTP:Mail:Settings:email:label' => 'User email',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. A code has been sent by email, please re-enter the code received to validate this modification',
-	'MFATOTP:Mail:Validation' => 'Validation code',
+	'MFATOTP:Mail:Validation' => 'Step 2: Activate MFA by email',
 	'MFATOTP:Mail:CodeValidation:explain' => 'Validate the code received by email',
-	'MFATOTP:Mail:ChangeEmail:Button' => 'Submit',
 
 	'MFATOTP:Mail:EmailSubject' => '%1$s - Code to connect. Expires at %3$s',
 	'MFATOTP:Mail:EmailBody' => '<body><p>The code to connect to %1$s as %2$s is</p><strong>%4$s</strong><p></p><p>This code is valid until %3$s</p><p>If you are not trying to connect to %1$s, please contact your administrator.</p>',

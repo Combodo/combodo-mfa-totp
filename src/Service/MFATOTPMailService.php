@@ -118,9 +118,6 @@ class MFATOTPMailService
 			$sUserId = $oMFAUserSettings->Get('user_id');
 			$oUser = MetaModel::GetObject(User::class, $sUserId, true, true);
 			$sEmail = $oUser->Get('email');
-			if (utils::IsNullOrEmptyString($sEmail)) {
-				$sEmail = 'please.replace@combodo.com';
-			}
 			$oMFAUserSettings->Set('email', $sEmail);
 			$oMFAUserSettings->Set('code_validity', 600);
 		} catch (MFABaseException $e) {
