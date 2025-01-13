@@ -50,7 +50,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'MFATOTP:Mail:Settings:email:label+' => 'E-Mail-Adresse, die für den Versand des MFA-Codes verwendet wird, standardmäßig die E-Mail-Adresse des Benutzers',
 	'MFATOTP:Mail:SetEmail:Button' => 'MFA-E-Mail festlegen',
 	'MFATOTP:Mail:ChangeEmail:Button' => 'MFA-E-Mail ändern',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA-E-Mail (%1$s) wurde erfolgreich gespeichert. Ein Code wurde per E-Mail gesendet, bitte geben Sie den erhaltenen Code erneut ein, um diese Änderung zu überprüfen',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA-E-Mail (%1$s) wurde erfolgreich gespeichert',
 	'MFATOTP:Mail:Validated' => 'E-Mail überprüft',
 	'MFATOTP:Mail:NotValidated' => 'Falscher Code',
 
@@ -67,7 +67,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'MFATOTP:Mail:EmailSubject' => '%1$s - Anmeldecode. Gültig bis %3$s',
     'MFATOTP:Mail:EmailBody' => '<body><p>Der Code, um sich bei %1$s als %2$s anzumelden, lautet</p><strong>%4$s</strong><p></p><p>Dieser Code ist gültig bis %3$s</p><p>Falls Sie nicht versuchen, sich bei %1$s anzumelden, wenden Sie sich bitte an Ihren Administrator.</p>',
 
-    'MFATOTP:Error:SendMailFailed' => 'Fehler: Das Senden des MFA-E-Mails für den Code ist fehlgeschlagen.',
+    'MFATOTP:Error:SendMailFailed' => 'Fehler: Das Senden des MFA-E-Mails für den Code ist fehlgeschlagen. Bitte überprüfen Sie die SMTP-Konfiguration.',
     'MFATOTP:Error:ConfigurationFailed' => 'Fehler: Die Konfiguration der MFA-App ist fehlgeschlagen.',
     'MFATOTP:Error:SaveSettingsFailed' => 'Fehler: Das Speichern der MFA-Einstellungen ist fehlgeschlagen (wahrscheinlich eine ungültige E-Mail)',
 

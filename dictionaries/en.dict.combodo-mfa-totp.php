@@ -48,7 +48,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFATOTP:Mail:Settings:email:label+' => 'Email used to send MFA code, by default the email of the user',
 	'MFATOTP:Mail:SetEmail:Button' => 'Set MFA email',
 	'MFATOTP:Mail:ChangeEmail:Button' => 'Change MFA email',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully. A code has been sent by email, please re-enter the code received to validate this modification',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'MFA email %1$s has been saved successfully',
 	'MFATOTP:Mail:Validated' => 'Email validated',
 	'MFATOTP:Mail:NotValidated' => 'Wrong code',
 
@@ -63,7 +63,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'MFATOTP:Mail:EmailSubject' => '%1$s - Code to connect. Expires at %3$s',
 	'MFATOTP:Mail:EmailBody' => '<body><p>The code to connect to %1$s as %2$s is</p><strong>%4$s</strong><p></p><p>This code is valid until %3$s</p><p>If you are not trying to connect to %1$s, please contact your administrator.</p>',
 
-	'MFATOTP:Error:SendMailFailed' => 'Error: Sending MFA email for code has failed.',
+	'MFATOTP:Error:SendMailFailed' => 'Error: Sending MFA email for code has failed. Please check the smtp configuration.',
 	'MFATOTP:Error:ConfigurationFailed' => 'Error: Configuring MFA application has failed.',
 	'MFATOTP:Error:SaveSettingsFailed' => 'Error: Saving MFA email has failed. (probably a wrong email format)',
 

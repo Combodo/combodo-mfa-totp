@@ -48,7 +48,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:Settings:email:label+' => 'L\'email utilisé pour envoyer le code MFA, par défaut l\'email de l\'utilisateur',
 	'MFATOTP:Mail:SetEmail:Button' => 'Définir l\'email MFA',
 	'MFATOTP:Mail:ChangeEmail:Button' => 'Changer l\'email MFA',
-	'MFATOTP:Mail:Settings:Saved:Done' => 'L\'email %1$s a été enregistré avec succès. Un code a été envoyé par email, veuillez le ressaisir pour valider cette modification',
+	'MFATOTP:Mail:Settings:Saved:Done' => 'L\'email %1$s a été enregistré avec succès',
 	'MFATOTP:Mail:Validated' => 'Email validé',
 	'MFATOTP:Mail:NotValidated' => 'Code invalide',
 
@@ -64,7 +64,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'MFATOTP:Mail:EmailSubject' => '%1$s - Code de connexion. Expire le %3$s',
 	'MFATOTP:Mail:EmailBody' => '<body><p>Le code pour se connecter à %1$s en tant que %2$s est </p><strong>%4$s</strong><p></p><p>Ce code est valide jusqu\'à %3$s</p><p>Si vous n\'essayez pas de vous connecter à %1$s, veuillez contacter votre administrateur.</p>',
 
-	'MFATOTP:Error:SendMailFailed' => 'Erreur: échec de l\'envoi d\'email',
+	'MFATOTP:Error:SendMailFailed' => 'Erreur: échec de l\'envoi d\'email. Veuillez vérifier la configuration smtp.',
 	'MFATOTP:Error:ConfigurationFailed' => 'Erreur: échec de la configuration de l\'app MFA',
 	'MFATOTP:Error:SaveSettingsFailed' => 'Erreur: échec de l\'enregistrement des réglages MFA (probablement un email invalide)',
 
