@@ -9,7 +9,7 @@
 </div>
 <form id="totp_form" method="post">
 	<div>
-        {% for sKey, sVal in aPostedParams %}
+        {% for sKey, sVal in aData.aPostedParams %}
             <input type="hidden" value="{{ sVal }}" name="{{ sKey }}">
         {% endfor %}
 		<input type="hidden" name="transaction_id" value="{{ aData.sTransactionId }}">
