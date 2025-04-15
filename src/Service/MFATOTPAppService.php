@@ -8,6 +8,7 @@ namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\Application\Helper\Session;
 use Combodo\iTop\MFABase\Helper\MFABaseException;
+use Combodo\iTop\MFABase\Helper\MFABaseHelper;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFABase\Service\MFABaseLoginService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
@@ -80,6 +81,7 @@ class MFATOTPAppService
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sSecret'] = $oTOTPService->GetSecret();
+			MFABaseHelper::GetInstance()->PassPostedParams($aData);
 			$aData['sTransactionId'] = utils::GetNewTransactionId();
 		} catch (MFABaseException $e) {
 			$aData['sError'] = Dict::S('MFATOTP:App:Configuration:Error');
@@ -118,6 +120,7 @@ class MFATOTPAppService
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
 			$aData['sTransactionId'] = utils::GetNewTransactionId();
+			MFABaseHelper::GetInstance()->PassPostedParams($aData);
 			if (Session::IsSet(MFABaseLoginService::MFA_LOGIN_VALIDATION_ERROR)) {
 				$aData['sError'] = Dict::S('Login:MFA:Validation:Error');
 			}

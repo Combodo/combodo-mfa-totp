@@ -8,6 +8,7 @@ namespace Combodo\iTop\MFATotp\Service;
 
 use Combodo\iTop\Application\Helper\Session;
 use Combodo\iTop\MFABase\Helper\MFABaseException;
+use Combodo\iTop\MFABase\Helper\MFABaseHelper;
 use Combodo\iTop\MFABase\Helper\MFABaseLog;
 use Combodo\iTop\MFABase\Service\MFABaseLoginService;
 use Combodo\iTop\MFATotp\Helper\MFATOTPHelper;
@@ -159,6 +160,7 @@ class MFATOTPMailService
 		try {
 			$oTOTPService = new OTPService($oMFAUserSettings);
 
+			MFABaseHelper::GetInstance()->PassPostedParams($aData);
 			$aData['sTitle'] = Dict::S('Login:MFA:Validation:Title');
 			$aData['sLabel'] = $oTOTPService->sLabel;
 			$aData['sIssuer'] = $oTOTPService->sIssuer;
