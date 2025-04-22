@@ -48,13 +48,9 @@ class MFATOTPService
 	public function HasToDisplayValidation(MFAUserSettingsTOTP $oMFAUserSettings): bool
 	{
 		try {
-			if ($oMFAUserSettings instanceof MFAUserSettingsTOTPApp) {
-				$sCode = utils::ReadPostedParam('totp_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
+			$sCode = utils::ReadPostedParam('totp_code', false, utils::ENUM_SANITIZATION_FILTER_INTEGER);
 
-				return ($sCode === false);
-			}
-
-			return true;
+			return ($sCode === false);
 		} catch (Exception $e) {
 			throw new MFABaseException(__FUNCTION__.' failed', 0, $e);
 		}

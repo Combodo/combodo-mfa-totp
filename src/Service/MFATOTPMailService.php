@@ -239,7 +239,7 @@ class MFATOTPMailService
 					$oMFAUserSettings->DBUpdate();
 
 					Session::Set('mfa_configuration_validated', 'true');
-					$aData['sURL'] = utils::GetAbsoluteUrlAppRoot();
+					$aData['sURL'] = utils::GetCurrentAbsoluteUrl();
 					$aData['sTitle'] = Dict::S('MFATOTP:Redirection:Title');
 					$oLoginContext = new LoginTwigContext();
 					$oLoginContext->SetLoaderPath(MODULESROOT.MFATOTPHelper::MODULE_NAME.'/templates/login');
