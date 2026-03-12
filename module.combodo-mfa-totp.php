@@ -1,4 +1,5 @@
 <?php
+
 //
 // iTop module definition file
 //
@@ -17,7 +18,7 @@ SetupWebPage::AddModule(
 		'dependencies' => [
 			'combodo-mfa-base/1.0.0',
 		],
-		'mandatory' => true,
+		'mandatory' => false,
 		'visible' => true,
 
 		// Components
@@ -35,11 +36,11 @@ SetupWebPage::AddModule(
 		'data.sample' => [
 			// add your sample data XML files here,
 		],
-		
+
 		// Documentation
 		//
 		'doc.manual_setup' => '', // hyperlink to manual setup documentation, if any
-		'doc.more_information' => '', // hyperlink to more information, if any 
+		'doc.more_information' => '', // hyperlink to more information, if any
 
 		// Default settings
 		//
@@ -48,4 +49,3 @@ SetupWebPage::AddModule(
 		],
 	]
 );
-
