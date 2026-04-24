@@ -18,7 +18,7 @@ SetupWebPage::AddModule(
 		'dependencies' => [
 			'combodo-mfa-base/1.0.0',
 		],
-		'mandatory' => true,
+		'mandatory' => false,
 		'visible' => true,
 
 		// Components
