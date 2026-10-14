@@ -15,3 +15,25 @@ $(".ibo-mfa-login-totp-switch-action").click(function() {
 	$(".ibo-mfa-login-totp-switch-to-data").hide();
 	$(".ibo-mfa-login-totp-alt").show();
 });
+
+
+// Avoid double submit when user presses enter
+const form = document.getElementById('totp_form');
+let isSubmitting = false; // Flag to track submission status
+
+form.addEventListener('submit', async (e) => {
+	e.preventDefault();
+
+	// Exit if already submitting (blocks race conditions)
+	if (isSubmitting) return;
+
+	// Mark as submitting
+	isSubmitting = true;
+
+	try {
+		await fetch('/api/submit', { method: 'POST', body: new FormData(form) });
+	} catch (error) {
+		// Reset state on failure
+		isSubmitting = false;
+	}
+});
